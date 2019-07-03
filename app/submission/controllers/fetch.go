@@ -6,11 +6,11 @@ import (
 )
 
 func FetchOne(c echo.Context) error {
-	//id := c.Param("id")
+	id := c.Param("id")
 
 	//put values into storage
 
 	//respond with id of new submission
 
-	return c.String(http.StatusOK, "Your submission has been received, now wait for our thing to be done")
+	return c.String(http.StatusOK, "Here is your great submission: " + id)
 }
