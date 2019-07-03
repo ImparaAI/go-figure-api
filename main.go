@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/labstack/echo/v4"
 
-	"app/app/article"
+	"app/app/submission"
 )
 
 func main() {
@@ -15,5 +15,5 @@ func main() {
 }
 
 func registerServices(e *echo.Echo) {
-	article.Register(e)
+	submission.Register(e)
 }

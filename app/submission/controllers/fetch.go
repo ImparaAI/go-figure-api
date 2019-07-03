@@ -6,7 +6,7 @@ import (
 )
 
 func FetchOne(c echo.Context) error {
-	id := c.Param("id")
+	//id := c.Param("id")
 
 	//put values into storage
 
