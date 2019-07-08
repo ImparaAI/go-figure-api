@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"github.com/labstack/echo/v4"
 
 	"app/app/submission"
@@ -11,7 +12,7 @@ func main() {
 
 	registerServices(e)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":" + os.Getenv("APP_PORT")))
 }
 
 func registerServices(e *echo.Echo) {

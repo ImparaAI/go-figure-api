@@ -22,6 +22,9 @@ RUN go build -o /bin/app
 RUN tr -d '\r' < /bin/original_start.sh > /bin/start.sh && \
     chmod -R 700 /bin/start.sh
 
+# Set application port env var
+ENV APP_PORT=8080
+
 EXPOSE 8080
 
 ENTRYPOINT ["/bin/start.sh"]
