@@ -12,5 +12,5 @@ func FetchOne(c echo.Context) error {
 
 	//respond with id of new submission
 
-	return c.String(http.StatusOK, "Here is your great submission: " + id)
+	return c.String(http.StatusOK, "Here is your submission name: " + id)
 }
