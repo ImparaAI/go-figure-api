@@ -5,6 +5,8 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/reposit
   apk update && \
   apk upgrade && \
   apk --no-cache add \
+    gcc \
+    libc-dev \
     supervisor \
     git
 
