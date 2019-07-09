@@ -12,5 +12,6 @@ import (
 
 func TestFetch(t *testing.T) {
 	request := test.Get("/submission/great")
+	assert.True(t, request.Ok())
 	assert.Equal(t, request.Body(), "Here is your submission name: great")
 }
