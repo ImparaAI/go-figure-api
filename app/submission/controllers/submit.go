@@ -5,6 +5,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type Submission struct {
+	Id int `json:"id"`
+}
+
 func Submit(c echo.Context) error {
 	//grab input from context
 
@@ -12,5 +16,7 @@ func Submit(c echo.Context) error {
 
 	//respond with id of new submission
 
-	return c.String(http.StatusOK, "Your submission has been received, now wait for our thing to be done")
+	submission := &Submission{1}
+
+	return c.JSON(http.StatusOK, submission)
 }
