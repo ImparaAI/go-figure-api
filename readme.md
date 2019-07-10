@@ -1,12 +1,14 @@
+# Go figure API
+
 A Go backend service for the go figure [web app](https://github.com/ImparaAI/go-figure-web). This is inspired by the [Fourier series circle drawings video by 3Blue1Brown](https://www.youtube.com/watch?v=r6sGWTCMz2k).
 
 This application accepts a series of continuous points captured at even time intervals, and a requested number of draw vectors to calculate. The calculation job is put onto a queue that is processed continuously. Once the job is complete, the results are available at the submission's uri as a list of vectors with *real* and *imaginary* parts that can then be animated.
 
 [![Build Status](https://travis-ci.org/ImparaAI/go-figure-api.png?branch=master)](https://travis-ci.org/ImparaAI/go-figure-api)
 
-# Routes
+## Routes
 
-## /submission
+### /submission
 Method: `POST`
 
 Input:
@@ -27,7 +29,7 @@ Output:
 {"id": 1}
 ```
 
-## /submission/:id
+### /submission/:id
 Method: `GET`
 
 Output:
@@ -50,7 +52,7 @@ Output:
 }
 ```
 
-## /submission/:id/draw-vectors/:int
+### /submission/:id/draw-vectors/:int
 Method: `POST`
 
 Output: `int` *(Current requested count)*
