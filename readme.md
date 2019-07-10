@@ -17,7 +17,6 @@ Input:
 	"points": [
 		{"x": 143, "y": 45},
 		{"x": 144, "y": 49},
-		//...
 	]
 }
 ```
@@ -38,18 +37,16 @@ Output:
 	"id": 1,
 	"points": [
 		{"x": 143, "y": 45},
-		{"x": 144, "y": 49},
-		//...
+		{"x": 144, "y": 49}
 	],
 	"drawVectors": {
 		"requestedCount": 20,
 		"calculated": [
 			{"real": 0, "imaginary": 2},
-			{"real": 0, "imaginary": 2},
-			//...
+			{"real": 0, "imaginary": 2}
 		],
 	},
-	"dateCreated": "2020-01-01 12:00:00", //utc
+	"dateCreated": "2020-01-01 12:00:00",
 }
 ```
 
