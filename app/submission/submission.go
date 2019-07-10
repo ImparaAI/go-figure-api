@@ -2,8 +2,9 @@ package submission
 
 import (
 	"github.com/labstack/echo/v4"
-	"api/app/submission/controllers"
+
 	"api/app/submission/middleware"
+	"api/app/submission/controllers"
 )
 
 func Register(e *echo.Echo) {

@@ -2,10 +2,9 @@ package submission
 
 import (
 	"testing"
-
-	"api/test"
 	"github.com/stretchr/testify/assert"
 
+	"api/test"
 )
 
 func TestFetch(t *testing.T) {
