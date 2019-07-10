@@ -1,4 +1,4 @@
-# Go figure API
+# Go Figure API
 
 A Go backend service for the go figure [web app](https://github.com/ImparaAI/go-figure-web). This is inspired by the [Fourier series circle drawings video by 3Blue1Brown](https://www.youtube.com/watch?v=r6sGWTCMz2k).
 
