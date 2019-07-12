@@ -1,6 +1,7 @@
 package requester
 
 import (
+	"strings"
 	"net/http"
 	"net/http/httptest"
 	"github.com/labstack/echo/v4"
@@ -12,6 +13,7 @@ import (
 func Request(method string, uri string) (*Response) {
 	e := app.New()
 
+	database.SetTestingEnvironment()
 	database.Initialize()
 
 	request := httptest.NewRequest(method, uri, nil)
@@ -41,6 +43,14 @@ func (response *Response) Ok() (bool) {
 	return response.ResponseRecorder.Code == http.StatusOK
 }
 
+func (response *Response) IsNotFound() (bool) {
+	return response.ResponseRecorder.Code == http.StatusNotFound
+}
+
+func (response *Response) IsBadRequest() (bool) {
+	return response.ResponseRecorder.Code == http.StatusBadRequest
+}
+
 func (response *Response) Body() (string) {
-	return response.ResponseRecorder.Body.String()
+	return strings.TrimRight(response.ResponseRecorder.Body.String(), "\n")
 }

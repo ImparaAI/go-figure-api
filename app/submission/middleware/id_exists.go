@@ -1,17 +1,25 @@
 package middleware
 
 import (
+	"strconv"
 	"net/http"
 	"github.com/labstack/echo/v4"
+
+	"api/app/submission/store"
 )
 
 func IdExists(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// id := c.Param("id")
+		id, err := strconv.Atoi(c.Param("id"))
 
-		// ask storage if id is valid
-		if !true {
-			return c.String(http.StatusBadRequest, "The provided submission doesn't exist: ")
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "The request is not properly formatted.")
+		}
+
+		exists, err := store.New().Exists(id)
+
+		if exists != true {
+			return echo.NewHTTPError(http.StatusNotFound, "This submission doesn't exist.")
 		}
 
 		return next(c)

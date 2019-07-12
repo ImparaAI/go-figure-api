@@ -1,9 +1,10 @@
 package store
 
 import (
-	"database/sql"
+	"github.com/jmoiron/sqlx"
 
 	"api/database"
+	"api/app/submission/types"
 )
 
 func New() *SubmissionStore {
@@ -12,24 +13,27 @@ func New() *SubmissionStore {
 	return store
 }
 
-type Submission struct {
-	Id int `json:"id"`
-}
-
 type SubmissionStore struct {
-	db *sql.DB
+	db *sqlx.DB
 }
 
-func (store *SubmissionStore) Get(id int) string {
-	rows, _ := store.db.Query("select name from foo where id = " + string(id))
+func (store *SubmissionStore) Exists(id int) (bool, error) {
+	var count int
+	err := store.db.Get(&count, "SELECT COUNT(id) FROM submissions WHERE id = ?", id)
 
-	var originalPoints string
-
-	rows.Scan(&originalPoints)
-
-	return originalPoints
+	return count > 0, err
 }
 
-func (store *SubmissionStore) Submit() {
-	store.db.Exec("INSERT INTO submissions (requestedDrawVectorCount, originalPoints) VALUES (20, 'foodicks')")
+func (store *SubmissionStore) Get(id int) (types.Submission, error) {
+	var submission types.Submission
+	err := store.db.Get(&submission, "SELECT * FROM submissions WHERE id = ?", id)
+
+	return submission, err
+}
+
+func (store *SubmissionStore) Submit() (int, error) {
+	result := store.db.MustExec("INSERT INTO submissions (requestedDrawVectorCount, originalPoints) VALUES (?, ?)", 20, "foopicks")
+	id, err := result.LastInsertId()
+
+	return int(id), err
 }

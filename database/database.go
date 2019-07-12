@@ -2,40 +2,28 @@ package database
 
 import (
 	"os"
-	"fmt"
 	"io/ioutil"
-	"database/sql"
 	"path/filepath"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var persistentDb *sql.DB
+var persistentDb *sqlx.DB
 var testing = false
 
-func GetDb() (*sql.DB) {
+func GetDb() (*sqlx.DB) {
 	return persistentDb
 }
 
 func Initialize() error {
-	filename := getFilename()
-
-	fmt.Println(filename)
-
-	if testing {
-		os.Remove(filename)
-	}
-
-	db, err := sql.Open("sqlite3", filename)
+	var err error
+	persistentDb, err = openDb()
 
 	if err != nil {
 		return err
 	}
 
-	persistentDb = db
-
-	runMigrations()
-
-	return nil
+	return runMigrations()
 }
 
 func SetTestingEnvironment() {
@@ -46,18 +34,28 @@ func Close() {
 	persistentDb.Close()
 }
 
-func runMigrations() {
+func openDb() (*sqlx.DB, error) {
+	filename := getFilename()
+
+	if testing {
+		os.Remove(filename)
+	}
+
+	return sqlx.Connect("sqlite3", filename)
+}
+
+func runMigrations() error {
 	pwd, _ := os.Getwd()
 	filename := filepath.Join(pwd, "database", "schema.sql")
 	file, err := ioutil.ReadFile(filename)
 
 	if err != nil {
-		fmt.Print(err)
+		return err
 	}
 
 	_, err = persistentDb.Exec(string(file))
 
-	fmt.Print(err)
+	return err
 }
 
 func getFilename() string {

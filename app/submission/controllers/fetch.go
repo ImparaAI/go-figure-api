@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"strconv"
 	"net/http"
 	"github.com/labstack/echo/v4"
 
@@ -8,15 +9,8 @@ import (
 )
 
 func FetchOne(c echo.Context) error {
-	//id := c.Param("id")
+	id, _ := strconv.Atoi(c.Param("id"))
+	submission, _ := store.New().Get(id)
 
-	//put values into storage
-
-	//respond with id of new submission
-
-	return c.String(http.StatusOK, "great")
-}
-
-func Test(c echo.Context) error {
-	return c.String(http.StatusOK, store.New().Get(1))
+	return c.JSON(http.StatusOK, submission)
 }
