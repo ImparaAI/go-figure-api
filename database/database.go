@@ -62,7 +62,7 @@ func getFilename() string {
 	pwd, _ := os.Getwd()
 
 	if testing {
-		return filepath.Join(pwd, "database", "sqlite", "test.db")
+		return filepath.Join(os.TempDir(), "test.db")
 	} else {
 		return filepath.Join(pwd, "database", "sqlite", "gofigure.db")
 	}
