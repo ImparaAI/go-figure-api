@@ -1,4 +1,4 @@
-package test
+package requester
 
 import (
 	"net/http"
@@ -6,10 +6,13 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"api/app"
+	"api/database"
 )
 
 func Request(method string, uri string) (*Response) {
 	e := app.New()
+
+	database.Initialize()
 
 	request := httptest.NewRequest(method, uri, nil)
 	responseRecorder := httptest.NewRecorder()

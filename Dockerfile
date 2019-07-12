@@ -8,6 +8,7 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/reposit
     gcc \
     libc-dev \
     supervisor \
+    sqlite \
     git
 
 WORKDIR $GOPATH/src/app

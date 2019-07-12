@@ -10,6 +10,7 @@ import (
 func Register(e *echo.Echo) {
 	e.GET("submission/:id", controllers.FetchOne, middleware.IdExists)
 	e.POST("submission", controllers.Submit, middleware.SubmissionIsValid)
+	e.GET("submission", controllers.GetSubmit)
 	e.GET("test", controllers.Test)
 
 }

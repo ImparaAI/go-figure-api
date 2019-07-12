@@ -4,11 +4,11 @@ import (
 	"testing"
 	"github.com/stretchr/testify/assert"
 
-	"api/test"
+	"api/test/requester"
 )
 
 func TestFetch(t *testing.T) {
-	response := test.Get("/submission/great")
+	response := requester.Get("/submission/great")
 	assert.True(t, response.Ok())
 	assert.Equal(t, response.Body(), "Here is your submission name: great")
 }
