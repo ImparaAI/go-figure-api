@@ -71,9 +71,28 @@ func normalizeTime(originalPoints []OriginalPoint) {
 	}
 }
 
-func vectorsOutsideThreshold(originalPoints *[]OriginalPoint, vectors *[]Vector) bool {
+func vectorsOutsideThreshold(originalPoints []OriginalPoint, vectors []Vector) bool {
+	distance := 0.00
 
-	return true
+	for i := 0; i < len(originalPoints); i++ {
+			originalPoint := originalPoints[i]
+			time := originalPoints[i].Time
+			calculatedVector := calculateVectorSum(time, vectors)
+			distance += math.Sqrt(math.Pow(2, calculatedVector.Real - float64(originalPoint.X)) + math.Pow(2, calculatedVector.Imaginary - float64(originalPoint.Y)))
+	}
+
+	return distance / float64(len(originalPoints)) < 5
+}
+
+func calculateVectorSum(time float64, vectors []Vector) Vector {
+	vector := Vector{};
+
+	for i := 0; i < len(vectors); i++ {
+		vector.Real += vectors[i].Real;
+		vector.Imaginary += vectors[i].Imaginary;
+	}
+
+	return vector;
 }
 
 func buildVector(n int, originalPoints []OriginalPoint) Vector {
