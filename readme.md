@@ -59,4 +59,4 @@ Output: `int` *(Current requested count)*
 
 ## Tests
 
-Run `go test ./...`.
+Run `go test ./.../test`.
