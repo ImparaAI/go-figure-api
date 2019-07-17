@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"github.com/labstack/echo/v4"
 
-	"api/app/submission/store"
+	"api/app/drawing/store"
 )
 
 func IdExists(next echo.HandlerFunc) echo.HandlerFunc {
@@ -19,7 +19,7 @@ func IdExists(next echo.HandlerFunc) echo.HandlerFunc {
 		exists, err := store.New().Exists(id)
 
 		if exists != true {
-			return echo.NewHTTPError(http.StatusNotFound, "This submission doesn't exist.")
+			return echo.NewHTTPError(http.StatusNotFound, "This drawing doesn't exist.")
 		}
 
 		return next(c)

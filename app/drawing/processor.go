@@ -1,11 +1,11 @@
-package submission
+package drawing
 
 import (
 	"math"
 	"math/cmplx"
 	"encoding/json"
 
-	"api/app/submission/store"
+	"api/app/drawing/store"
 )
 
 type OriginalPoint struct {
@@ -20,9 +20,9 @@ type Vector struct {
 	Imaginary float64
 }
 
-func Process(submissionId int) error {
+func Process(drawingId int) error {
 	store := store.New()
-	originalPoints := createOriginalPoints(submissionId)
+	originalPoints := createOriginalPoints(drawingId)
 	n := 0
 	maxVectorCount := 101
 	vectors := []Vector{}
@@ -37,21 +37,21 @@ func Process(submissionId int) error {
 		n++
 	}
 
-	store.AddVectors(submissionId, vectors)
+	store.AddVectors(drawingId, vectors)
 
 	return nil
 }
 
-func createOriginalPoints(submissionId int) *[]OriginalPoint {
+func createOriginalPoints(drawingId int) *[]OriginalPoint {
 	store := store.New()
-	submission, err := store.Get(submissionId)
+	drawing, err := store.Get(drawingId)
 
 	if err != nil {
-		panic("The submission could not be found in storage.")
+		panic("The drawing could not be found in storage.")
 	}
 
 	originalPoints := []OriginalPoint{}
-	err = json.Unmarshal(submission.OriginalPoints, &originalPoints)
+	err = json.Unmarshal(drawing.OriginalPoints, &originalPoints)
 
 	if err != nil {
 		panic("The input points seem to be improperly formatted.")

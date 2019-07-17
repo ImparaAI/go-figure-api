@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"github.com/labstack/echo/v4"
 
-	"api/app/submission/store"
+	"api/app/drawing/store"
 )
 
-type Submission struct {
+type Drawing struct {
 	Id int `json:"id"`
 }
 
@@ -16,11 +16,11 @@ func Submit(c echo.Context) error {
 
 	//put values into storage
 
-	//respond with id of new submission
+	//respond with id of new drawing
 
-	submission := &Submission{1}
+	drawing := &Drawing{1}
 
-	return c.JSON(http.StatusOK, submission)
+	return c.JSON(http.StatusOK, drawing)
 }
 
 func GetSubmit(c echo.Context) error {
@@ -28,11 +28,11 @@ func GetSubmit(c echo.Context) error {
 
 	//put values into storage
 
-	//respond with id of new submission
+	//respond with id of new drawing
 
 	store.New().Submit()
 
-	submission := &Submission{1}
+	drawing := &Drawing{1}
 
-	return c.JSON(http.StatusOK, submission)
+	return c.JSON(http.StatusOK, drawing)
 }

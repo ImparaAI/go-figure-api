@@ -1,5 +1,5 @@
 BEGIN;
-CREATE TABLE IF NOT EXISTS submissions (
+CREATE TABLE IF NOT EXISTS drawings (
   id INTEGER PRIMARY KEY,
   requestedDrawVectorCount int unsigned NOT NULL,
   featured tinyint NOT NULL DEFAULT 0,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS submissions (
   createdAt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   lastDrawVectorCalculatedAt datetime NULL DEFAULT NULL
 );
-CREATE INDEX IF NOT EXISTS creation_time ON submissions (createdAt);
-CREATE INDEX IF NOT EXISTS featured ON submissions (featured, createdAt);
+CREATE INDEX IF NOT EXISTS creation_time ON drawings (createdAt);
+CREATE INDEX IF NOT EXISTS featured ON drawings (featured, createdAt);
 
 COMMIT;

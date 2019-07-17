@@ -5,7 +5,7 @@ import (
 	//"api/app/formatting"
 )
 
-type Submission struct {
+type Drawing struct {
 	Id int `db:"id" json:"id"`
 	RequestedDrawVectorCount int `db:"requestedDrawVectorCount" json:"requestedDrawVectorCount"`
 	Featured bool `db:"featured" json:"featured"`

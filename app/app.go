@@ -4,7 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"api/app/submission"
+	"api/app/drawing"
 )
 
 func New() (*echo.Echo) {
@@ -21,5 +21,5 @@ func New() (*echo.Echo) {
 }
 
 func registerServices(e *echo.Echo) {
-	submission.Register(e)
+	drawing.Register(e)
 }
