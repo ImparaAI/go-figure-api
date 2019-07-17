@@ -17,8 +17,8 @@ Input:
 {
 	"drawVectorCount": 20,
 	"points": [
-		{"x": 143, "y": 45},
-		{"x": 144, "y": 49},
+		{"x": 143, "y": 45, "time": 0},
+		{"x": 144, "y": 49, "time": 0.01}
 	]
 }
 ```
@@ -38,17 +38,17 @@ Output:
 {
 	"id": 1,
 	"points": [
-		{"x": 143, "y": 45},
-		{"x": 144, "y": 49}
+		{"x": 143, "y": 45, "time": 0},
+		{"x": 144, "y": 49, "time": 0.01}
 	],
 	"drawVectors": {
-		"requestedCount": 20,
 		"calculated": [
-			{"real": 0, "imaginary": 2},
-			{"real": 0, "imaginary": 2}
+			{"n": 0, "real": 0, "imaginary": 2},
+			{"n": 1, "real": 0, "imaginary": 2.5},
+			{"n": -1, "real": 0.5, "imaginary": 2.7}
 		],
 	},
-	"dateCreated": "2020-01-01 12:00:00",
+	"dateCreated": "2020-01-01 12:00:00"
 }
 ```
 
