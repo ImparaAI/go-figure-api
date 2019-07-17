@@ -21,7 +21,7 @@ type Vector struct {
 }
 
 func Process(drawingId int) error {
-	store := store.New()
+	//store := store.New()
 	originalPoints := createOriginalPoints(drawingId)
 	n := 0
 	maxVectorCount := 101
@@ -37,12 +37,12 @@ func Process(drawingId int) error {
 		n++
 	}
 
-	store.AddVectors(drawingId, vectors)
+	//store.AddVectors(drawingId, vectors)
 
 	return nil
 }
 
-func createOriginalPoints(drawingId int) *[]OriginalPoint {
+func createOriginalPoints(drawingId int) []OriginalPoint {
 	store := store.New()
 	drawing, err := store.Get(drawingId)
 
@@ -51,7 +51,8 @@ func createOriginalPoints(drawingId int) *[]OriginalPoint {
 	}
 
 	originalPoints := []OriginalPoint{}
-	err = json.Unmarshal(drawing.OriginalPoints, &originalPoints)
+	b := []byte(drawing.OriginalPoints)
+	err = json.Unmarshal(b, &originalPoints)
 
 	if err != nil {
 		panic("The input points seem to be improperly formatted.")
@@ -59,34 +60,33 @@ func createOriginalPoints(drawingId int) *[]OriginalPoint {
 
 	normalizeTime(originalPoints)
 
-	return &originalPoints
+	return originalPoints
 }
 
 func normalizeTime(originalPoints []OriginalPoint) {
 	finalPoint := originalPoints[len(originalPoints) - 1]
 
 	for i := 0; i < len(originalPoints); i++ {
-		originalPoints.Time = originalPoints.Time / finalPoint.Time
+		originalPoints[i].Time = originalPoints[i].Time / finalPoint.Time
 	}
 }
 
 func vectorsOutsideThreshold(originalPoints *[]OriginalPoint, vectors *[]Vector) bool {
-	errorThreshold := 0.02
-	averageError := 1
 
 	return true
 }
 
-func buildVector(n int, originalPoints *[]OriginalPoint) Vector {
+func buildVector(n int, originalPoints []OriginalPoint) Vector {
 	time := 0.00
 	timeDelta := 0.01
 	originalPointsIndex := 0
 	cumulativeValue := 0 + 0i
+	originalPoint := OriginalPoint{}
 
 	for time <= 1 {
-		originalPoint, originalPointsIndex := findOriginalPoint(time, originalPoints[originalPointsIndex:])
-		originalComplexValue := complex(OriginalPoint.X, OriginalPoint.Y)
-		cumulativeValue := originalComplexValue * cmplx.Exp(float64(-n) * math.Pi * 2i * time)
+		originalPoint, originalPointsIndex = findOriginalPoint(time, originalPoints[originalPointsIndex:])
+		originalComplexValue := complex(float64(originalPoint.X), float64(originalPoint.Y))
+		cumulativeValue = originalComplexValue * cmplx.Exp(complex(0.00, float64(-n) * 2.0 * math.Pi * time))
 
 		time += timeDelta
 	}
@@ -100,6 +100,6 @@ func findOriginalPoint(time float64, originalPoints []OriginalPoint) (OriginalPo
 			return originalPoints[i], i
 		}
 	}
-	'
+
 	return originalPoints[len(originalPoints) - 1], len(originalPoints) - 1
 }
