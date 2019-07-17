@@ -38,7 +38,7 @@ func Process(submissionId int) error {
 		n++
 	}
 
-	storeVectors(submissionId, vectors)
+	store.addVectors(submissionId, vectors)
 
 	return nil
 }
