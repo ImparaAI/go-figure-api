@@ -37,3 +37,7 @@ func (store *SubmissionStore) Submit() (int, error) {
 
 	return int(id), err
 }
+
+func (store *SubmissionStore) AddVectors(submissionId int, vectors string) {
+	store.db.MustExec("UPDATE submissions SET vectors = ? WHERE submissionId = ?", vectors, submissionId)
+}

@@ -1,8 +1,7 @@
-package processing
+package submission
 
 import (
 	"math"
-	"errors"
 	"math/cmplx"
 	"encoding/json"
 
@@ -38,12 +37,13 @@ func Process(submissionId int) error {
 		n++
 	}
 
-	store.addVectors(submissionId, vectors)
+	store.AddVectors(submissionId, vectors)
 
 	return nil
 }
 
 func createOriginalPoints(submissionId int) *[]OriginalPoint {
+	store := store.New()
 	submission, err := store.Get(submissionId)
 
 	if err != nil {
@@ -51,42 +51,55 @@ func createOriginalPoints(submissionId int) *[]OriginalPoint {
 	}
 
 	originalPoints := []OriginalPoint{}
-	err := json.Unmarshal(submission.OriginalPoints, &originalPoints)
+	err = json.Unmarshal(submission.OriginalPoints, &originalPoints)
 
 	if err != nil {
 		panic("The input points seem to be improperly formatted.")
 	}
 
+	normalizeTime(originalPoints)
+
 	return &originalPoints
+}
+
+func normalizeTime(originalPoints []OriginalPoint) {
+	finalPoint := originalPoints[len(originalPoints) - 1]
+
+	for i := 0; i < len(originalPoints); i++ {
+		originalPoints.Time = originalPoints.Time / finalPoint.Time
+	}
 }
 
 func vectorsOutsideThreshold(originalPoints *[]OriginalPoint, vectors *[]Vector) bool {
 	errorThreshold := 0.02
 	averageError := 1
+
+	return true
 }
 
-func buildVector(n int, originalPoints *[]OriginalPoint) *Vector {
-	time := 0
+func buildVector(n int, originalPoints *[]OriginalPoint) Vector {
+	time := 0.00
 	timeDelta := 0.01
-	finalPointTime := originalPoints[len(originalPoints) - 1].Time
 	originalPointsIndex := 0
 	cumulativeValue := 0 + 0i
 
-	for time < finalPointTime {
+	for time <= 1 {
 		originalPoint, originalPointsIndex := findOriginalPoint(time, originalPoints[originalPointsIndex:])
-		originalComplexValue = complex(OriginalPoint.X, OriginalPoint.Y)
-		cumulativeValue := originalComplexValue * cmplx.Exp(-n * math.Pi * 2i * time)
+		originalComplexValue := complex(OriginalPoint.X, OriginalPoint.Y)
+		cumulativeValue := originalComplexValue * cmplx.Exp(float64(-n) * math.Pi * 2i * time)
 
 		time += timeDelta
 	}
 
-	return &Vector{N: n, Real: real(cumulativeValue), Imaginary: imag(cumulativeValue)}
+	return Vector{N: n, Real: real(cumulativeValue), Imaginary: imag(cumulativeValue)}
 }
 
-func findOriginalPoint(time float64, originalPoints []OriginalPoint) (*OriginalPoint, int) {
+func findOriginalPoint(time float64, originalPoints []OriginalPoint) (OriginalPoint, int) {
 	for i := 0; i < len(originalPoints); i++ {
 		if originalPoints[i].Time >= time {
 			return originalPoints[i], i
 		}
 	}
+	'
+	return originalPoints[len(originalPoints) - 1], len(originalPoints) - 1
 }
