@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"github.com/labstack/echo/v4"
 
-	"api/app/drawing/store"
+	//"api/app/drawing/store"
 )
 
 type Drawing struct {
@@ -17,20 +17,6 @@ func Submit(c echo.Context) error {
 	//put values into storage
 
 	//respond with id of new drawing
-
-	drawing := &Drawing{1}
-
-	return c.JSON(http.StatusOK, drawing)
-}
-
-func GetSubmit(c echo.Context) error {
-	//grab input from context
-
-	//put values into storage
-
-	//respond with id of new drawing
-
-	store.New().Submit()
 
 	drawing := &Drawing{1}
 

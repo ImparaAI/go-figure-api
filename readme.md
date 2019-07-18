@@ -15,7 +15,6 @@ Input:
 
 ```json
 {
-	"drawVectorCount": 20,
 	"points": [
 		{"x": 143, "y": 45, "time": 0},
 		{"x": 144, "y": 49, "time": 0.01}

@@ -6,38 +6,30 @@ import (
 	"encoding/json"
 
 	"api/app/drawing/store"
+	"api/app/drawing/types"
 )
 
-type OriginalPoint struct {
-	X int
-	Y int
-	Time float64
-}
-
-type Vector struct {
-	N int
-	Real float64
-	Imaginary float64
-}
+type OriginalPoint types.OriginalPoint
+type DrawVector types.DrawVector
 
 func Process(drawingId int) error {
 	//store := store.New()
 	originalPoints := createOriginalPoints(drawingId)
 	n := 0
-	maxVectorCount := 101
-	vectors := []Vector{}
+	maxDrawVectorCount := 101
+	vectors := []DrawVector{}
 
-	for (len(vectors) < maxVectorCount) {// && vectorsOutsideThreshold(vectors, originalPoints) {
-		vectors = append(vectors, buildVector(n, originalPoints))
+	for (len(vectors) < maxDrawVectorCount) {// && vectorsOutsideThreshold(vectors, originalPoints) {
+		vectors = append(vectors, buildDrawVector(n, originalPoints))
 
 		if n != 0 {
-			vectors = append(vectors, buildVector(n * -1, originalPoints))
+			vectors = append(vectors, buildDrawVector(n * -1, originalPoints))
 		}
 
 		n++
 	}
 
-	//store.AddVectors(drawingId, vectors)
+	//store.AddDrawVectors(drawingId, vectors)
 
 	return nil
 }
@@ -71,21 +63,21 @@ func normalizeTime(originalPoints []OriginalPoint) {
 	}
 }
 
-func vectorsOutsideThreshold(originalPoints []OriginalPoint, vectors []Vector) bool {
+func vectorsOutsideThreshold(originalPoints []OriginalPoint, vectors []DrawVector) bool {
 	distance := 0.00
 
 	for i := 0; i < len(originalPoints); i++ {
 			originalPoint := originalPoints[i]
 			time := originalPoints[i].Time
-			calculatedVector := calculateVectorSum(time, vectors)
-			distance += math.Sqrt(math.Pow(2, calculatedVector.Real - float64(originalPoint.X)) + math.Pow(2, calculatedVector.Imaginary - float64(originalPoint.Y)))
+			calculatedDrawVector := calculateDrawVectorSum(time, vectors)
+			distance += math.Sqrt(math.Pow(2, calculatedDrawVector.Real - float64(originalPoint.X)) + math.Pow(2, calculatedDrawVector.Imaginary - float64(originalPoint.Y)))
 	}
 
 	return distance / float64(len(originalPoints)) < 5
 }
 
-func calculateVectorSum(time float64, vectors []Vector) Vector {
-	vector := Vector{};
+func calculateDrawVectorSum(time float64, vectors []DrawVector) DrawVector {
+	vector := DrawVector{};
 
 	for i := 0; i < len(vectors); i++ {
 		vector.Real += vectors[i].Real;
@@ -95,7 +87,7 @@ func calculateVectorSum(time float64, vectors []Vector) Vector {
 	return vector;
 }
 
-func buildVector(n int, originalPoints []OriginalPoint) Vector {
+func buildDrawVector(n int, originalPoints []OriginalPoint) DrawVector {
 	time := 0.00
 	timeDelta := 0.01
 	originalPointsIndex := 0
@@ -110,7 +102,7 @@ func buildVector(n int, originalPoints []OriginalPoint) Vector {
 		time += timeDelta
 	}
 
-	return Vector{N: n, Real: real(cumulativeValue), Imaginary: imag(cumulativeValue)}
+	return DrawVector{N: n, Real: real(cumulativeValue), Imaginary: imag(cumulativeValue)}
 }
 
 func findOriginalPoint(time float64, originalPoints []OriginalPoint) (OriginalPoint, int) {

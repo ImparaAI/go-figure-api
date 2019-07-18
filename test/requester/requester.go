@@ -10,13 +10,14 @@ import (
 	"api/database"
 )
 
-func Request(method string, uri string) (*Response) {
+func Request(method string, uri string, payload string) (*Response) {
 	e := app.New()
 
 	database.SetTestingEnvironment()
 	database.Initialize()
 
-	request := httptest.NewRequest(method, uri, nil)
+	payloadReader := strings.NewReader(payload)
+	request := httptest.NewRequest(method, uri, payloadReader)
 	responseRecorder := httptest.NewRecorder()
 
 	e.ServeHTTP(responseRecorder, request)
@@ -27,11 +28,11 @@ func Request(method string, uri string) (*Response) {
 }
 
 func Get(uri string) (*Response) {
-	return Request(echo.GET, uri)
+	return Request(echo.GET, uri, "")
 }
 
-func Post(method string, uri string) (*Response) {
-	return Request(echo.POST, uri)
+func Post(uri string, payload string) (*Response) {
+	return Request(echo.POST, uri, payload)
 }
 
 
