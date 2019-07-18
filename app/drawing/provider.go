@@ -9,5 +9,5 @@ import (
 
 func Register(e *echo.Echo) {
 	e.GET("drawing/:id", controllers.FetchOne, middleware.IdExists)
-	e.POST("drawing", controllers.Submit, middleware.DrawingInputIsValid)
+	e.POST("drawing", controllers.Submit, middleware.SubmissionIsValid)
 }

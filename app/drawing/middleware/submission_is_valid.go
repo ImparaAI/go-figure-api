@@ -8,7 +8,7 @@ import (
 	"api/app/drawing/types"
 )
 
-func DrawingInputIsValid(next echo.HandlerFunc) echo.HandlerFunc {
+func SubmissionIsValid(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		input := &types.SubmitInput{}
 		err := apphttp.BuildJson(c, input)
