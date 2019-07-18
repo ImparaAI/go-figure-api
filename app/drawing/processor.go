@@ -69,22 +69,23 @@ func vectorsOutsideThreshold(originalPoints []OriginalPoint, vectors []DrawVecto
 	for i := 0; i < len(originalPoints); i++ {
 			originalPoint := originalPoints[i]
 			time := originalPoints[i].Time
-			calculatedDrawVector := calculateDrawVectorSum(time, vectors)
-			distance += math.Sqrt(math.Pow(2, calculatedDrawVector.Real - float64(originalPoint.X)) + math.Pow(2, calculatedDrawVector.Imaginary - float64(originalPoint.Y)))
+			estimate := calculateOutput(time, vectors)
+			distance += math.Sqrt(math.Pow(2, real(estimate) - float64(originalPoint.X)) + math.Pow(2, imag(estimate) - float64(originalPoint.Y)))
 	}
 
 	return distance / float64(len(originalPoints)) < 5
 }
 
-func calculateDrawVectorSum(time float64, vectors []DrawVector) DrawVector {
-	vector := DrawVector{};
+func calculateOutput(time float64, vectors []DrawVector) complex128 {
+	sum := complex(0, 0);
 
 	for i := 0; i < len(vectors); i++ {
-		vector.Real += vectors[i].Real;
-		vector.Imaginary += vectors[i].Imaginary;
+		c := complex(vectors[i].Real, vectors[i].Imaginary)
+		power := complex(0.00, float64(vectors[i].N) * 2.00 * math.Pi * time)
+		sum += c * cmplx.Exp(power)
 	}
 
-	return vector;
+	return sum;
 }
 
 func buildDrawVector(n int, originalPoints []OriginalPoint) DrawVector {
