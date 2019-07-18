@@ -1,6 +1,7 @@
 package store
 
 import (
+	"encoding/json"
 	"github.com/jmoiron/sqlx"
 
 	"api/database"
@@ -31,8 +32,9 @@ func (store *DrawingStore) Get(id int) (types.Drawing, error) {
 	return drawing, err
 }
 
-func (store *DrawingStore) Submit() (int, error) {
-	result := store.db.MustExec("INSERT INTO drawings (requestedDrawVectorCount, originalPoints) VALUES (?, ?)", 20, "foopicks")
+func (store *DrawingStore) Create(points []types.OriginalPoint) (int, error) {
+	json, _ := json.Marshal(points)
+	result := store.db.MustExec(`INSERT INTO drawings (originalPoints) VALUES (?)`, json)
 	id, err := result.LastInsertId()
 
 	return int(id), err

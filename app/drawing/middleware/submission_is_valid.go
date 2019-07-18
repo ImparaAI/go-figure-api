@@ -29,7 +29,7 @@ func SubmissionIsValid(next echo.HandlerFunc) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "Each point's time should be equal to or greater than the previous point.")
 		}
 
-		c.Set("input", input)
+		c.Set("points", input.Points)
 
 		return next(c)
 	}

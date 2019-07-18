@@ -52,3 +52,10 @@ func TestNonSequentialTimes(t *testing.T) {
 	assert.True(t, response.IsBadRequest())
 	assert.Equal(t, `{"message":"Each point's time should be equal to or greater than the previous point."}`, response.Body())
 }
+
+func TestSuccess(t *testing.T) {
+	json := `{"points":[{"x": 4, "y": 5, "time": 0}, {"x": 5, "y": 1, "time": 0}, {"x": 2, "y": 3, "time": 1.5}, {"x": 6, "y": 3, "time": 2.1}]}`
+	response := requester.Post("/drawing", json)
+	assert.True(t, response.Ok())
+	assert.Equal(t, `{"id":1}`, response.Body())
+}

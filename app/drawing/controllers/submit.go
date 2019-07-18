@@ -4,15 +4,18 @@ import (
 	"net/http"
 	"github.com/labstack/echo/v4"
 
-	//"api/app/drawing/store"
+	"api/app/drawing/store"
+	"api/app/drawing/types"
 )
 
 func Submit(c echo.Context) error {
-	input := c.Get("input")
+	points, _ := c.Get("points").([]types.OriginalPoint)
 
-	//put values into storage
+	id, _ := store.New().Create(points)
 
-	//respond with id of new drawing
+	return c.JSON(http.StatusOK, Response{id})
+}
 
-	return c.JSON(http.StatusOK, input)
+type Response struct {
+	Id int `json:"id"`
 }
