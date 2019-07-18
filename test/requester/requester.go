@@ -14,7 +14,11 @@ func Request(method string, uri string, payload string) (*Response) {
 	e := app.New()
 
 	database.SetTestingEnvironment()
-	database.Initialize()
+	err := database.Initialize()
+
+	if err != nil {
+		panic(err)
+	}
 
 	payloadReader := strings.NewReader(payload)
 	request := httptest.NewRequest(method, uri, payloadReader)

@@ -35,7 +35,7 @@ func Close() {
 }
 
 func openDb() (*sqlx.DB, error) {
-	filename := getFilename()
+	filename := getDatabaseFilename()
 
 	if testing {
 		os.Remove(filename)
@@ -45,8 +45,7 @@ func openDb() (*sqlx.DB, error) {
 }
 
 func runMigrations() error {
-	pwd, _ := os.Getwd()
-	filename := filepath.Join(pwd, "database", "schema.sql")
+	filename := getSchemaFilename()
 	file, err := ioutil.ReadFile(filename)
 
 	if err != nil {
@@ -58,7 +57,18 @@ func runMigrations() error {
 	return err
 }
 
-func getFilename() string {
+func getSchemaFilename() string {
+	pwd, _ := os.Getwd()
+
+	if testing {
+		//todo: recurse up the pwd until you find correct file
+		return "/go/src/app/database/schema.sql"
+	} else {
+		return filepath.Join(pwd, "database", "schema.sql")
+	}
+}
+
+func getDatabaseFilename() string {
 	pwd, _ := os.Getwd()
 
 	if testing {
