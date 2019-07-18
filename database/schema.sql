@@ -1,7 +1,6 @@
 BEGIN;
 CREATE TABLE IF NOT EXISTS drawings (
   id INTEGER PRIMARY KEY,
-  requestedDrawVectorCount int unsigned NOT NULL,
   featured tinyint NOT NULL DEFAULT 0,
   originalPoints text NOT NULL,
   drawVectors text NULL DEFAULT NULL,
