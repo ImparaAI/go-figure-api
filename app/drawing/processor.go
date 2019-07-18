@@ -64,16 +64,21 @@ func normalizeTime(originalPoints []OriginalPoint) {
 }
 
 func vectorsOutsideThreshold(originalPoints []OriginalPoint, vectors []DrawVector) bool {
+	averageDistance := getAverageDistance(originalPoints, vectors)
+
+	return averageDistance < 5
+}
+
+func getAverageDistance(originalPoints []OriginalPoint, vectors []DrawVector) float64 {
 	distance := 0.00
 
 	for i := 0; i < len(originalPoints); i++ {
-			originalPoint := originalPoints[i]
-			time := originalPoints[i].Time
-			estimate := calculateOutput(time, vectors)
-			distance += math.Sqrt(math.Pow(2, real(estimate) - float64(originalPoint.X)) + math.Pow(2, imag(estimate) - float64(originalPoint.Y)))
+			original := originalPoints[i]
+			estimate := calculateOutput(originalPoints[i].Time, vectors)
+			distance += math.Sqrt(math.Pow(2, real(estimate) - float64(original.X)) + math.Pow(2, imag(estimate) - float64(original.Y)))
 	}
 
-	return distance / float64(len(originalPoints)) < 5
+	return distance / float64(len(originalPoints))
 }
 
 func calculateOutput(time float64, vectors []DrawVector) complex128 {
