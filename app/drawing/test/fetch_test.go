@@ -15,6 +15,6 @@ func TestNonIntegerId(t *testing.T) {
 		assert.True(t, response.IsBadRequest())
 
 		message := "The string '" + val + "' should produce a non-int error."
-		assert.Equal(t, "{\"message\":\"The request is not properly formatted.\"}", response.Body(), message)
+		assert.Equal(t, `{"message":"The request is not properly formatted."}`, response.Body(), message)
 	}
 }

@@ -13,10 +13,18 @@ func TestNonJsonInput(t *testing.T) {
 	for _, val := range nonInts {
 		response := requester.Post("/drawing", val)
 		assert.True(t, response.IsBadRequest())
-		assert.Equal(t, "{\"message\":\"The request is not properly formatted.\"}", response.Body())
+		assert.Equal(t, `{"message":"The request is not properly formatted."}`, response.Body())
 	}
 }
 
-func TestMissingJsonField(t *testing.T) {
+func TestMissingPointsField(t *testing.T) {
+	response := requester.Post("/drawing", "{}")
+	assert.True(t, response.IsBadRequest())
+	assert.Equal(t, `{"message":"The request is not properly formatted."}`, response.Body())
+}
 
+func TestEmptyPointsField(t *testing.T) {
+	response := requester.Post("/drawing", `{"points":[]}`)
+	assert.True(t, response.IsBadRequest())
+	assert.Equal(t, `{"message":"There needs to be at least 1 point."}`, response.Body())
 }
