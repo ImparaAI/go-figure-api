@@ -1,12 +1,13 @@
 package test
 
 import (
+	"time"
 	"strconv"
 	"testing"
 	"github.com/stretchr/testify/assert"
 
 	"api/database"
-	//"api/test/json"
+	"api/test/json"
 	"api/test/requester"
 	"api/app/drawing/types"
 	"api/app/drawing/store"
@@ -42,23 +43,27 @@ func TestFetchSuccess(t *testing.T) {
 
 	store := store.New()
 	id := store.Create(points)
-	//drawing := store.Get(id)
 
 	response := requester.Get("/drawing/" + strconv.Itoa(id))
 	assert.True(t, response.Ok())
 
-	/*json := json.Compact(`{
+	drawing := store.Get(id)
+	createdAt := string(time.Time(drawing.CreatedAt).Format("2006-01-02T15:04:05-0700"))
+
+	json := json.Compact(`{
 		"id": 1,
 		"featured": false,
 		"originalPoints": [
 			{"x": 4, "y": 5, "time": 0},
-			{"x": 5, "y": 1, "time": 0},
+			{"x": 5, "y": 1, "time": 0.5},
 			{"x": 2, "y": 3, "time": 1.5},
 			{"x": 6, "y": 3, "time": 2.1}
 		],
 		"drawVectors": [],
-		"calculatedDrawVectorCount": 0
+		"calculatedDrawVectorCount": 0,
+		"createdAt": "` + createdAt + `",
+		"lastDrawVectorCalculatedAt": null
 	}`)
 
-	assert.Equal(t, json, response.Body())*/
+	assert.Equal(t, json, response.Body())
 }
