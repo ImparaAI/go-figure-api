@@ -51,11 +51,6 @@ Output:
 }
 ```
 
-### /drawing/:id/draw-vectors/:int
-Method: `POST`
-
-Output: `int` *(Current requested count)*
-
 ## Tests
 
 Run `go test ./.../test`.
