@@ -5,6 +5,8 @@ import (
 	"testing"
 	"github.com/stretchr/testify/assert"
 
+	"api/database"
+	//"api/test/json"
 	"api/test/requester"
 	"api/app/drawing/types"
 	"api/app/drawing/store"
@@ -22,6 +24,14 @@ func TestNonIntegerId(t *testing.T) {
 	}
 }
 
+func TestUnknownId(t *testing.T) {
+	database.ClearTestingDb()
+
+	response := requester.Get("/drawing/1")
+	assert.True(t, response.IsNotFound())
+	assert.Equal(t, `{"message":"This drawing doesn't exist."}`, response.Body())
+}
+
 func TestFetchSuccess(t *testing.T) {
 	points := []types.OriginalPoint{
 		types.OriginalPoint{X: 4, Y: 5, Time: 0},
@@ -36,5 +46,19 @@ func TestFetchSuccess(t *testing.T) {
 
 	response := requester.Get("/drawing/" + strconv.Itoa(id))
 	assert.True(t, response.Ok())
-	//assert.Equal(t, `{"id":1,"featured":false,"originalPoints":"[{"x": 4, "y": 5, "time": 0}, {"x": 5, "y": 1, "time": 0}, {"x": 2, "y": 3, "time": 1.5}, {"x": 6, "y": 3, "time": 2.1}]","drawVectors":"[]","calculatedDrawVectorCount":0}`, response.Body())
+
+	/*json := json.Compact(`{
+		"id": 1,
+		"featured": false,
+		"originalPoints": [
+			{"x": 4, "y": 5, "time": 0},
+			{"x": 5, "y": 1, "time": 0},
+			{"x": 2, "y": 3, "time": 1.5},
+			{"x": 6, "y": 3, "time": 2.1}
+		],
+		"drawVectors": [],
+		"calculatedDrawVectorCount": 0
+	}`)
+
+	assert.Equal(t, json, response.Body())*/
 }

@@ -3,21 +3,17 @@ package drawing
 import (
 	"math"
 	"math/cmplx"
-	"encoding/json"
 
 	"api/app/drawing/store"
 	"api/app/drawing/types"
 )
-
-type OriginalPoint types.OriginalPoint
-type DrawVector types.DrawVector
 
 func Process(drawingId int) error {
 	//store := store.New()
 	originalPoints := createOriginalPoints(drawingId)
 	n := 0
 	maxDrawVectorCount := 101
-	vectors := []DrawVector{}
+	vectors := []types.DrawVector{}
 
 	for (len(vectors) < maxDrawVectorCount) {// && vectorsOutsideThreshold(vectors, originalPoints) {
 		vectors = append(vectors, buildDrawVector(n, originalPoints))
@@ -34,7 +30,7 @@ func Process(drawingId int) error {
 	return nil
 }
 
-func createOriginalPoints(drawingId int) []OriginalPoint {
+func createOriginalPoints(drawingId int) []types.OriginalPoint {
 	store := store.New()
 	drawing := store.Get(drawingId)
 
@@ -42,20 +38,12 @@ func createOriginalPoints(drawingId int) []OriginalPoint {
 		panic("The drawing could not be found in storage.")
 	}
 
-	originalPoints := []OriginalPoint{}
-	b := []byte(drawing.OriginalPoints)
-	err := json.Unmarshal(b, &originalPoints)
+	normalizeTime(drawing.OriginalPoints)
 
-	if err != nil {
-		panic("The input points seem to be improperly formatted.")
-	}
-
-	normalizeTime(originalPoints)
-
-	return originalPoints
+	return drawing.OriginalPoints
 }
 
-func normalizeTime(originalPoints []OriginalPoint) {
+func normalizeTime(originalPoints []types.OriginalPoint) {
 	finalPoint := originalPoints[len(originalPoints) - 1]
 
 	for i := 0; i < len(originalPoints); i++ {
@@ -63,13 +51,13 @@ func normalizeTime(originalPoints []OriginalPoint) {
 	}
 }
 
-func vectorsOutsideThreshold(originalPoints []OriginalPoint, vectors []DrawVector) bool {
+func vectorsOutsideThreshold(originalPoints []types.OriginalPoint, vectors []types.DrawVector) bool {
 	averageDistance := getAverageDistance(originalPoints, vectors)
 
 	return averageDistance < 5
 }
 
-func getAverageDistance(originalPoints []OriginalPoint, vectors []DrawVector) float64 {
+func getAverageDistance(originalPoints []types.OriginalPoint, vectors []types.DrawVector) float64 {
 	distance := 0.00
 
 	for i := 0; i < len(originalPoints); i++ {
@@ -81,7 +69,7 @@ func getAverageDistance(originalPoints []OriginalPoint, vectors []DrawVector) fl
 	return distance / float64(len(originalPoints))
 }
 
-func calculateOutput(time float64, vectors []DrawVector) complex128 {
+func calculateOutput(time float64, vectors []types.DrawVector) complex128 {
 	sum := complex(0, 0);
 
 	for i := 0; i < len(vectors); i++ {
@@ -93,12 +81,12 @@ func calculateOutput(time float64, vectors []DrawVector) complex128 {
 	return sum;
 }
 
-func buildDrawVector(n int, originalPoints []OriginalPoint) DrawVector {
+func buildDrawVector(n int, originalPoints []types.OriginalPoint) types.DrawVector {
 	time := 0.00
 	timeDelta := 0.01
 	originalPointsIndex := 0
 	cumulativeValue := 0 + 0i
-	originalPoint := OriginalPoint{}
+	originalPoint := types.OriginalPoint{}
 
 	for time <= 1 {
 		originalPoint, originalPointsIndex = findOriginalPoint(time, originalPoints[originalPointsIndex:])
@@ -108,10 +96,10 @@ func buildDrawVector(n int, originalPoints []OriginalPoint) DrawVector {
 		time += timeDelta
 	}
 
-	return DrawVector{N: n, Real: real(cumulativeValue), Imaginary: imag(cumulativeValue)}
+	return types.DrawVector{N: n, Real: real(cumulativeValue), Imaginary: imag(cumulativeValue)}
 }
 
-func findOriginalPoint(time float64, originalPoints []OriginalPoint) (OriginalPoint, int) {
+func findOriginalPoint(time float64, originalPoints []types.OriginalPoint) (types.OriginalPoint, int) {
 	for i := 0; i < len(originalPoints); i++ {
 		if originalPoints[i].Time >= time {
 			return originalPoints[i], i
