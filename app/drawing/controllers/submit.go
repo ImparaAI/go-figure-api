@@ -6,12 +6,15 @@ import (
 
 	"api/app/drawing/store"
 	"api/app/drawing/types"
+	"api/app/drawing/processing"
 )
 
 func Submit(c echo.Context) error {
 	points, _ := c.Get("points").([]types.OriginalPoint)
 
 	id := store.New().Create(points)
+
+	processing.Process(id)
 
 	return c.JSON(http.StatusOK, Response{id})
 }
