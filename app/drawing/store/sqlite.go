@@ -1,49 +1,65 @@
 package store
 
 import (
-	//"fmt"
+	"time"
 	"encoding/json"
 	"github.com/jmoiron/sqlx"
 
-	"api/database"
+	"api/app/formatting"
 	"api/app/drawing/types"
 )
 
-func New() *DrawingStore {
-	store := &DrawingStore{database.GetDb()}
-
-	return store
-}
-
-type DrawingStore struct {
+type SqliteStore struct {
 	db *sqlx.DB
 }
 
-func (store *DrawingStore) Exists(id int) (bool, error) {
+func (store *SqliteStore) Exists(id int) (bool) {
 	var count int
 	err := store.db.Get(&count, "SELECT COUNT(id) FROM drawings WHERE id = ?", id)
 
-	return count > 0, err
+	if err != nil {
+		panic(err)
+	}
+
+	return count > 0
 }
 
-func (store *DrawingStore) Get(id int) (types.Drawing, error) {
-	var drawing types.Drawing
-	err := store.db.Get(&drawing, "SELECT * FROM drawings WHERE id = ?", id)
+func (store *SqliteStore) Get(id int) (types.Drawing) {
+	var sqlDrawing SqlDrawing
 
-	return drawing, err
+	err := store.db.Get(&sqlDrawing, "SELECT * FROM drawings WHERE id = ?", id)
+
+	if err != nil {
+		panic(err)
+	}
+
+	drawing := types.Drawing{
+		Id: sqlDrawing.Id,
+		Featured: sqlDrawing.Featured,
+		OriginalPoints: sqlDrawing.OriginalPoints,
+		DrawVectors: sqlDrawing.DrawVectors,
+		CalculatedDrawVectorCount: sqlDrawing.CalculatedDrawVectorCount,
+		CreatedAt: formatting.JSONTime(sqlDrawing.CreatedAt),
+	}
+
+	if sqlDrawing.LastDrawVectorCalculatedAt.Valid {
+		drawing.LastDrawVectorCalculatedAt = formatting.JSONTime(sqlDrawing.LastDrawVectorCalculatedAt.Time)
+	} else {
+		drawing.LastDrawVectorCalculatedAt = formatting.JSONTime(time.Time{})
+	}
+
+	return drawing
 }
 
-func (store *DrawingStore) Create(points []types.OriginalPoint) (int, error) {
+func (store *SqliteStore) Create(points []types.OriginalPoint) (int) {
 	json, _ := json.Marshal(points)
 
-	//fmt.Println(json)
+	result := store.db.MustExec(`INSERT INTO drawings (originalPoints) VALUES (?)`, string(json[:]))
+	id, _ := result.LastInsertId()
 
-	result := store.db.MustExec(`INSERT INTO drawings (originalPoints) VALUES (?)`, json)
-	id, err := result.LastInsertId()
-
-	return int(id), err
+	return int(id)
 }
 
-func (store *DrawingStore) AddVectors(drawingId int, vectors string) {
+func (store *SqliteStore) AddVectors(drawingId int, vectors string) {
 	store.db.MustExec("UPDATE drawings SET vectors = ? WHERE drawingId = ?", vectors, drawingId)
 }

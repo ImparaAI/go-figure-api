@@ -1,11 +1,24 @@
 package test
 
 import (
+	"os"
 	"testing"
 	"github.com/stretchr/testify/assert"
 
+	"api/database"
 	"api/test/requester"
 )
+
+func TestMain(m *testing.M) {
+	database.SetTestingEnvironment()
+	err := database.Initialize()
+
+	if err != nil {
+		panic(err)
+	}
+
+	os.Exit(m.Run())
+}
 
 func TestNonJsonInput(t *testing.T) {
 	nonInts := []string{"foo", "[]", "4.2", ""}
@@ -53,7 +66,8 @@ func TestNonSequentialTimes(t *testing.T) {
 	assert.Equal(t, `{"message":"Each point's time should be equal to or greater than the previous point."}`, response.Body())
 }
 
-func TestSuccess(t *testing.T) {
+func TestSubmitSuccess(t *testing.T) {
+	database.ClearTestingDb()
 	json := `{"points":[{"x": 4, "y": 5, "time": 0}, {"x": 5, "y": 1, "time": 0}, {"x": 2, "y": 3, "time": 1.5}, {"x": 6, "y": 3, "time": 2.1}]}`
 	response := requester.Post("/drawing", json)
 	assert.True(t, response.Ok())

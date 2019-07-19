@@ -16,9 +16,7 @@ func IdExists(next echo.HandlerFunc) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "The request is not properly formatted.")
 		}
 
-		exists, err := store.New().Exists(id)
-
-		if exists != true {
+		if store.New().Exists(id) != true {
 			return echo.NewHTTPError(http.StatusNotFound, "This drawing doesn't exist.")
 		}
 

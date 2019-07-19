@@ -10,7 +10,6 @@ import (
 
 func FetchOne(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	drawing, _ := store.New().Get(id)
 
-	return c.JSON(http.StatusOK, drawing)
+	return c.JSON(http.StatusOK, store.New().Get(id))
 }

@@ -11,7 +11,7 @@ import (
 func Submit(c echo.Context) error {
 	points, _ := c.Get("points").([]types.OriginalPoint)
 
-	id, _ := store.New().Create(points)
+	id := store.New().Create(points)
 
 	return c.JSON(http.StatusOK, Response{id})
 }

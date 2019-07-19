@@ -2,7 +2,7 @@ package types
 
 import (
 	//"time"
-	//"api/app/formatting"
+	"api/app/formatting"
 )
 
 type Drawing struct {
@@ -11,6 +11,6 @@ type Drawing struct {
 	OriginalPoints string `db:"originalPoints" json:"originalPoints"`
 	DrawVectors string `db:"drawVectors" json:"drawVectors"`
 	CalculatedDrawVectorCount int `db:"calculatedDrawVectorCount" json:"calculatedDrawVectorCount"`
-	CreatedAt string `db:"createdAt" json:"createdAt"`
-	LastDrawVectorCalculatedAt string `db:"lastDrawVectorCalculatedAt" json:"lastDrawVectorCalculatedAt"`
+	CreatedAt formatting.JSONTime `db:"createdAt" json:"createdAt"`
+	LastDrawVectorCalculatedAt formatting.JSONTime `db:"lastDrawVectorCalculatedAt" json:"lastDrawVectorCalculatedAt"`
 }

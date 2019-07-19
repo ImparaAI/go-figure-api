@@ -34,6 +34,12 @@ func Close() {
 	persistentDb.Close()
 }
 
+func ClearTestingDb() {
+	if testing {
+		Initialize()
+	}
+}
+
 func openDb() (*sqlx.DB, error) {
 	filename := getDatabaseFilename()
 

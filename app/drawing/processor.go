@@ -36,15 +36,15 @@ func Process(drawingId int) error {
 
 func createOriginalPoints(drawingId int) []OriginalPoint {
 	store := store.New()
-	drawing, err := store.Get(drawingId)
+	drawing := store.Get(drawingId)
 
-	if err != nil {
+	if drawing.Id == 0 {
 		panic("The drawing could not be found in storage.")
 	}
 
 	originalPoints := []OriginalPoint{}
 	b := []byte(drawing.OriginalPoints)
-	err = json.Unmarshal(b, &originalPoints)
+	err := json.Unmarshal(b, &originalPoints)
 
 	if err != nil {
 		panic("The input points seem to be improperly formatted.")

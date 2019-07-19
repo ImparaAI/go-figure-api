@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS drawings (
   id INTEGER PRIMARY KEY,
   featured tinyint NOT NULL DEFAULT 0,
   originalPoints text NOT NULL,
-  drawVectors text NULL DEFAULT NULL,
+  drawVectors text NOT NULL DEFAULT "[]",
   calculatedDrawVectorCount int unsigned NOT NULL DEFAULT 0,
   createdAt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   lastDrawVectorCalculatedAt datetime NULL DEFAULT NULL
