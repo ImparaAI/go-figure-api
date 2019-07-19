@@ -16,5 +16,5 @@ type Store interface {
 	Exists(id int) (bool)
 	Get(id int) (types.Drawing)
 	Create(points []types.OriginalPoint) (int)
-	AddVectors(drawingId int, vectors string)
+	AddVectors(drawingId int, vectors []types.DrawVector)
 }

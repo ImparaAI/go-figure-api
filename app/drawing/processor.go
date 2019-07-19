@@ -9,7 +9,7 @@ import (
 )
 
 func Process(drawingId int) error {
-	//store := store.New()
+	store := store.New()
 	originalPoints := createOriginalPoints(drawingId)
 	n := 0
 	maxDrawVectorCount := 101
@@ -25,7 +25,7 @@ func Process(drawingId int) error {
 		n++
 	}
 
-	//store.AddDrawVectors(drawingId, vectors)
+	store.AddVectors(drawingId, vectors)
 
 	return nil
 }

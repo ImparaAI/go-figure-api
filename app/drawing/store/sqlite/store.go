@@ -43,6 +43,8 @@ func (store *SqliteStore) Create(points []types.OriginalPoint) (int) {
 	return int(id)
 }
 
-func (store *SqliteStore) AddVectors(drawingId int, vectors string) {
-	store.DB.MustExec("UPDATE drawings SET vectors = ? WHERE drawingId = ?", vectors, drawingId)
+func (store *SqliteStore) AddVectors(drawingId int, vectors []types.DrawVector) {
+	json, _ := json.Marshal(vectors)
+
+	store.DB.MustExec("UPDATE drawings SET drawVectors = ? WHERE id = ?", string(json), drawingId)
 }
