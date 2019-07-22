@@ -12,22 +12,25 @@ func Process(drawingId int) error {
 	store := store.New()
 	originalPoints := createOriginalPoints(drawingId)
 	n := 0
-	maxDrawVectorCount := 101
+	maxDrawVectorCount := 100
 	vectors := []types.DrawVector{}
 
-	for (len(vectors) < maxDrawVectorCount) {// && vectorsOutsideThreshold(vectors, originalPoints) {
+	for (len(vectors) < maxDrawVectorCount) && !vectorsAproximateOriginal(vectors, originalPoints) {
 		vectors = append(vectors, buildDrawVector(n, originalPoints))
-
-		if n != 0 {
-			vectors = append(vectors, buildDrawVector(n * -1, originalPoints))
-		}
-
-		n++
+		n = getNextN(n);
 	}
 
 	store.AddVectors(drawingId, vectors)
 
 	return nil
+}
+
+func getNextN(n int) int {
+	if n > 0 {
+		return -1 * n
+	}
+
+	return -1 * n + 1
 }
 
 func createOriginalPoints(drawingId int) []types.OriginalPoint {
@@ -51,7 +54,7 @@ func normalizeTime(originalPoints []types.OriginalPoint) {
 	}
 }
 
-func vectorsOutsideThreshold(originalPoints []types.OriginalPoint, vectors []types.DrawVector) bool {
+func vectorsAproximateOriginal(vectors []types.DrawVector, originalPoints []types.OriginalPoint) bool {
 	averageDistance := getAverageDistance(originalPoints, vectors)
 
 	return averageDistance < 5
@@ -61,9 +64,9 @@ func getAverageDistance(originalPoints []types.OriginalPoint, vectors []types.Dr
 	distance := 0.00
 
 	for i := 0; i < len(originalPoints); i++ {
-			original := originalPoints[i]
-			estimate := calculateOutput(originalPoints[i].Time, vectors)
-			distance += math.Sqrt(math.Pow(2, real(estimate) - float64(original.X)) + math.Pow(2, imag(estimate) - float64(original.Y)))
+		original := originalPoints[i]
+		estimate := calculateOutput(originalPoints[i].Time, vectors)
+		distance += math.Sqrt(math.Pow(real(estimate) - float64(original.X), 2) + math.Pow(imag(estimate) - float64(original.Y), 2))
 	}
 
 	return distance / float64(len(originalPoints))
@@ -91,7 +94,7 @@ func buildDrawVector(n int, originalPoints []types.OriginalPoint) types.DrawVect
 	for time <= 1 {
 		originalPoint, originalPointsIndex = findOriginalPoint(time, originalPoints[originalPointsIndex:])
 		originalComplexValue := complex(float64(originalPoint.X), float64(originalPoint.Y))
-		cumulativeValue = originalComplexValue * cmplx.Exp(complex(0.00, float64(-n) * 2.0 * math.Pi * time))
+		cumulativeValue += originalComplexValue * cmplx.Exp(complex(0.00, float64(-n) * 2.0 * math.Pi * time)) * complex(timeDelta, 0)
 
 		time += timeDelta
 	}
