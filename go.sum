@@ -12,6 +12,8 @@ github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZm
 github.com/gchaincl/dotsql v0.1.0 h1:7d9YDkEJwWCsoUtERXKRTDFvyAU9CXiHuTqurVxBdf4=
 github.com/gchaincl/dotsql v0.1.0/go.mod h1:p7/SafmAOftYCqOhMKQKDIXDYg8CXl+8X7/8Qat1I8w=
 github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
+github.com/google/go-cmp v0.3.0 h1:crn/baboCvb5fXaQ0IJ1SGTsTVrWpDsCWC8EGETZijY=
+github.com/google/go-cmp v0.3.0/go.mod h1:8QqcDgzrUqlUb/G2PQTWiueGozuR1884gddMywk6iLU=
 github.com/jmoiron/sqlx v1.2.0 h1:41Ip0zITnmWNR/vHV+S4m+VoUivnWY5E4OJfLZjCJMA=
 github.com/jmoiron/sqlx v1.2.0/go.mod h1:1FEQNm3xlJgrMD+FBdI9+xvCksHtbpVBBw5dYhBSsks=
 github.com/labstack/echo/v4 v4.1.6 h1:WOvLa4T1KzWCRpANwz0HGgWDelXSSGwIKtKBbFdHTv4=

@@ -4,25 +4,35 @@ import (
 	"math"
 	"math/cmplx"
 
+	"api/app/util"
 	"api/app/drawing/store"
 	"api/app/drawing/types"
 )
 
 func Process(drawingId int) error {
+	originalPoints := BuildOriginalPoints(drawingId)
+	vectors := buildDrawVectors(originalPoints)
+
+	saveDrawVectors(drawingId, vectors)
+
+	return nil
+}
+
+func saveDrawVectors(drawingId int, vectors []types.DrawVector) {
 	store := store.New()
-	originalPoints := createOriginalPoints(drawingId)
+	store.AddVectors(drawingId, vectors)
+}
+
+func buildDrawVectors(originalPoints []types.OriginalPoint) []types.DrawVector {
 	n := 0
-	maxDrawVectorCount := 100
 	vectors := []types.DrawVector{}
 
-	for (len(vectors) < maxDrawVectorCount) && !vectorsAproximateOriginal(vectors, originalPoints) {
+	for (len(vectors) < 100) && !vectorsAproximateOriginal(vectors, originalPoints) {
 		vectors = append(vectors, buildDrawVector(n, originalPoints))
 		n = getNextN(n);
 	}
 
-	store.AddVectors(drawingId, vectors)
-
-	return nil
+	return vectors
 }
 
 func getNextN(n int) int {
@@ -31,27 +41,6 @@ func getNextN(n int) int {
 	}
 
 	return -1 * n + 1
-}
-
-func createOriginalPoints(drawingId int) []types.OriginalPoint {
-	store := store.New()
-	drawing := store.Get(drawingId)
-
-	if drawing.Id == 0 {
-		panic("The drawing could not be found in storage.")
-	}
-
-	normalizeTime(drawing.OriginalPoints)
-
-	return drawing.OriginalPoints
-}
-
-func normalizeTime(originalPoints []types.OriginalPoint) {
-	finalPoint := originalPoints[len(originalPoints) - 1]
-
-	for i := 0; i < len(originalPoints); i++ {
-		originalPoints[i].Time = originalPoints[i].Time / finalPoint.Time
-	}
 }
 
 func vectorsAproximateOriginal(vectors []types.DrawVector, originalPoints []types.OriginalPoint) bool {
@@ -86,12 +75,12 @@ func calculateOutput(time float64, vectors []types.DrawVector) complex128 {
 
 func buildDrawVector(n int, originalPoints []types.OriginalPoint) types.DrawVector {
 	time := 0.00
-	timeDelta := 0.01
+	timeDelta := 0.001
 	originalPointsIndex := 0
 	cumulativeValue := 0 + 0i
 	originalPoint := types.OriginalPoint{}
 
-	for time <= 1 {
+	for util.FloatCompare(time, 1.00, 0.0001) < 0 {
 		originalPoint, originalPointsIndex = findOriginalPoint(time, originalPoints[originalPointsIndex:])
 		originalComplexValue := complex(float64(originalPoint.X), float64(originalPoint.Y))
 		cumulativeValue += originalComplexValue * cmplx.Exp(complex(0.00, float64(-n) * 2.0 * math.Pi * time)) * complex(timeDelta, 0)
@@ -104,7 +93,7 @@ func buildDrawVector(n int, originalPoints []types.OriginalPoint) types.DrawVect
 
 func findOriginalPoint(time float64, originalPoints []types.OriginalPoint) (types.OriginalPoint, int) {
 	for i := 0; i < len(originalPoints); i++ {
-		if originalPoints[i].Time >= time {
+		if util.FloatCompare(originalPoints[i].Time, time, 0.001) >= 0 {
 			return originalPoints[i], i
 		}
 	}
