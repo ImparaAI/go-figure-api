@@ -14,7 +14,7 @@ func (t JSONTime) MarshalJSON() ([]byte, error) {
 		return []byte("null"), nil
 	}
 
-    stamp := fmt.Sprintf(`"%s"`, time.Format("2006-01-02T15:04:05-0700"))
+	stamp := fmt.Sprintf(`"%s"`, time.Format("2006-01-02T15:04:05-0700"))
 
-    return []byte(stamp), nil
+	return []byte(stamp), nil
 }

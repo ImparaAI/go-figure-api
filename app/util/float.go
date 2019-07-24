@@ -6,7 +6,7 @@ import (
 )
 
 func FloatCompare(x float64, y float64, tolerance float64) int {
-	floatCompare  := getFloatEqualityComparer(tolerance)
+	floatCompare := getFloatEqualityComparer(tolerance)
 
 	if cmp.Equal(x, y, floatCompare) {
 		return 0
@@ -21,13 +21,13 @@ func FloatCompare(x float64, y float64, tolerance float64) int {
 
 func getFloatEqualityComparer(tolerance float64) cmp.Option {
 	return cmp.Comparer(func(x, y float64) bool {
-	  diff := math.Abs(x - y)
-	  mean := math.Abs(x + y) / 2.0
+		diff := math.Abs(x - y)
+		mean := math.Abs(x + y) / 2.0
 
-	  if math.IsNaN(diff / mean) {
-	      return true
-	  }
+		if math.IsNaN(diff / mean) {
+			return true
+		}
 
-	  return (diff / mean) < tolerance
+		return (diff / mean) < tolerance
 	})
 }

@@ -6,7 +6,7 @@ import (
 )
 
 type SQLNullTime struct {
-	Time  time.Time
+	Time time.Time
 	Valid bool
 }
 
