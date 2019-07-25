@@ -44,17 +44,17 @@ func buildUnitCirclePoints(radius float64) ([]types.OriginalPoint) {
 	return points
 }
 
-func getVectorComparer(tolernce float64) cmp.Option {
+func getVectorComparer(tolerance float64) cmp.Option {
 	return cmp.Comparer(func(a, b types.DrawVector) bool {
 		if a.N != b.N {
 			return false
 		}
 
-		if math.Abs(a.Real - b.Real) > tolernce {
+		if math.Abs(a.Real - b.Real) > tolerance {
 			return false
 		}
 
-		if math.Abs(a.Imaginary - b.Imaginary) > tolernce {
+		if math.Abs(a.Imaginary - b.Imaginary) > tolerance {
 			return false
 		}
 
