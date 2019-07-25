@@ -5,9 +5,16 @@ import (
 
 	"api/app/drawing/middleware"
 	"api/app/drawing/controllers"
+	"api/app/drawing/processing"
 )
 
 func Register(e *echo.Echo) {
+	registerRoutes(e)
+
+	processing.PrepareQueues()
+}
+
+func registerRoutes(e *echo.Echo) {
 	e.GET("drawing/:id", controllers.FetchOne, middleware.IdExists)
 	e.POST("drawing", controllers.Submit, middleware.SubmissionIsValid)
 }

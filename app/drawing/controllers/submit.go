@@ -14,7 +14,7 @@ func Submit(c echo.Context) error {
 
 	id := store.New().Create(points)
 
-	processing.Process(id)
+	processing.AddToQueue(id)
 
 	return c.JSON(http.StatusOK, Response{id})
 }
