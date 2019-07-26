@@ -49,9 +49,9 @@ func getAverageDistance(originalPoints []types.OriginalPoint, vectors []types.Dr
 func calculateOutput(time float64, vectors []types.DrawVector) complex128 {
 	sum := complex(0, 0);
 
-	for i := 0; i < len(vectors); i++ {
-		c := complex(vectors[i].Real, vectors[i].Imaginary)
-		power := complex(0.00, float64(vectors[i].N) * 2.00 * math.Pi * time)
+	for _, vector := range vectors {
+		c := complex(vector.Real, vector.Imaginary)
+		power := complex(0.00, float64(vector.N) * 2.00 * math.Pi * time)
 		sum += c * cmplx.Exp(power)
 	}
 
@@ -77,11 +77,33 @@ func buildDrawVector(n int, originalPoints []types.OriginalPoint) types.DrawVect
 }
 
 func findOriginalPoint(time float64, originalPoints []types.OriginalPoint) (types.OriginalPoint, int) {
-	for i := 0; i < len(originalPoints); i++ {
-		if util.FloatCompare(originalPoints[i].Time, time, 0.001) >= 0 {
-			return originalPoints[i], i
+	for i, originalPoint := range originalPoints {
+		if util.FloatCompare(originalPoint.Time, time, 0.001) == 0 {
+			return originalPoint, i
+		}
+
+		if i != 0 && timeBetweenPoints(time, originalPoints[i-1] , originalPoint) {
+			p1 := originalPoints[i-1]
+			p2 := originalPoint
+
+			return types.OriginalPoint{
+				Time: time,
+				X: int(getLinearAverage(time, p1.Time, p2.Time, p1.X, p2.X)),
+				Y: int(getLinearAverage(time, p1.Time, p2.Time, p1.Y, p2.Y)),
+			}, i - 1
 		}
 	}
 
 	return originalPoints[len(originalPoints) - 1], len(originalPoints) - 1
+}
+
+func timeBetweenPoints(time float64, p1, p2 types.OriginalPoint) bool {
+	return util.FloatCompare(time, p1.Time, 0.001) == 1 && util.FloatCompare(time, p2.Time, 0.001) == -1
+}
+
+func getLinearAverage(input float64, x1, x2 float64, y1, y2 int) float64 {
+	slope := float64(y2 - y1) / (x2 - x1)
+	intercept := float64(y2) - slope * x2
+
+	return slope * input + intercept
 }
