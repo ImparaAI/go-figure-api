@@ -6,7 +6,7 @@ import (
 )
 
 func Process(drawingId int) {
-	originalPoints := BuildOriginalPoints(drawingId)
+	originalPoints := buildOriginalPoints(drawingId)
 	vectors := buildDrawVectors(originalPoints)
 
 	saveDrawVectors(drawingId, vectors)

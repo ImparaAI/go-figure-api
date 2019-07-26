@@ -5,7 +5,7 @@ import (
 	"api/app/drawing/types"
 )
 
-func BuildOriginalPoints(drawingId int) []types.OriginalPoint {
+func buildOriginalPoints(drawingId int) []types.OriginalPoint {
 	drawing := getDrawing(drawingId)
 	normalizeTime(drawing.OriginalPoints)
 
