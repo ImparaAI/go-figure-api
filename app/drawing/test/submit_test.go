@@ -36,10 +36,25 @@ func TestMissingPointsField(t *testing.T) {
 	assert.Equal(t, `{"message":"The request is not properly formatted."}`, response.Body())
 }
 
+func TestMissingImage(t *testing.T) {
+	json := `{"points":[{"x": 0, "y": 0, "time": 0}]}`
+	response := requester.Post("/drawing", json)
+	assert.True(t, response.IsBadRequest())
+	assert.Equal(t, `{"message":"The request is not properly formatted."}`, response.Body())
+}
+
+func TestEmptyImage(t *testing.T) {
+	json := `{"points":[{"x": 0, "y": 0, "time": 0}, "image": ""]}`
+	response := requester.Post("/drawing", json)
+	assert.True(t, response.IsBadRequest())
+	assert.Equal(t, `{"message":"The request is not properly formatted."}`, response.Body())
+}
+
 func TestEmptyPointsField(t *testing.T) {
-	response := requester.Post("/drawing", `{"points":[]}`)
+	response := requester.Post("/drawing", `{"points":[], "image": "image"}`)
 	assert.True(t, response.IsBadRequest())
 	assert.Equal(t, `{"message":"There needs to be at least 1 point."}`, response.Body())
+	assert.Equal(t, 1, 2)
 }
 
 func TestInvalidPoints(t *testing.T) {
@@ -53,14 +68,14 @@ func TestInvalidPoints(t *testing.T) {
 }
 
 func TestFirstPointTimeNonZero(t *testing.T) {
-	json := `{"points":[{"x": 4, "y": 5, "time": 0.5}, {"x": 5, "y": 1, "time": 1}]}`
+	json := `{"points":[{"x": 4, "y": 5, "time": 0.5}, {"x": 5, "y": 1, "time": 1}], "image": "image"}`
 	response := requester.Post("/drawing", json)
 	assert.True(t, response.IsBadRequest())
 	assert.Equal(t, `{"message":"The first point's time must be zero."}`, response.Body())
 }
 
 func TestNonSequentialTimes(t *testing.T) {
-	json := `{"points":[{"x": 4, "y": 5, "time": 0}, {"x": 5, "y": 1, "time": 0}, {"x": 2, "y": 3, "time": 1.5}, {"x": 6, "y": 3, "time": 1.1}]}`
+	json := `{"points":[{"x": 4, "y": 5, "time": 0}, {"x": 5, "y": 1, "time": 0}, {"x": 2, "y": 3, "time": 1.5}, {"x": 6, "y": 3, "time": 1.1}], "image": "image"}`
 	response := requester.Post("/drawing", json)
 	assert.True(t, response.IsBadRequest())
 	assert.Equal(t, `{"message":"Each point's time should be equal to or greater than the previous point."}`, response.Body())
@@ -68,7 +83,7 @@ func TestNonSequentialTimes(t *testing.T) {
 
 func TestSubmitSuccess(t *testing.T) {
 	database.ClearTestingDb()
-	json := `{"points":[{"x": 4, "y": 5, "time": 0}, {"x": 5, "y": 1, "time": 0}, {"x": 2, "y": 3, "time": 1.5}, {"x": 6, "y": 3, "time": 2.1}]}`
+	json := `{"points":[{"x": 4, "y": 5, "time": 0}, {"x": 5, "y": 1, "time": 0}, {"x": 2, "y": 3, "time": 1.5}, {"x": 6, "y": 3, "time": 2.1}], "image": "image"}`
 	response := requester.Post("/drawing", json)
 	assert.True(t, response.Ok())
 	assert.Equal(t, `{"id":1}`, response.Body())

@@ -13,7 +13,7 @@ func SubmissionIsValid(next echo.HandlerFunc) echo.HandlerFunc {
 		input := &types.SubmitInput{}
 		err := apphttp.BuildJson(c, input)
 
-		if (err != nil) || (input.Points == nil) {
+		if (err != nil) || (input.Points == nil) || (input.Image == "") {
 			return echo.NewHTTPError(http.StatusBadRequest, "The request is not properly formatted.")
 		}
 
@@ -29,6 +29,7 @@ func SubmissionIsValid(next echo.HandlerFunc) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "Each point's time should be equal to or greater than the previous point.")
 		}
 
+		c.Set("image", input.Image)
 		c.Set("points", input.Points)
 
 		return next(c)

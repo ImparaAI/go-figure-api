@@ -16,7 +16,7 @@ import (
 func TestCircle(t *testing.T) {
 	store := store.New()
 	radius := 100.00
-	id := store.Create(buildUnitCirclePoints(radius))
+	id := store.Create(buildUnitCirclePoints(radius), "")
 	processing.Process(id)
 	result := store.Get(id)
 

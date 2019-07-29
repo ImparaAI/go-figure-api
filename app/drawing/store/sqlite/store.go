@@ -34,10 +34,10 @@ func (store *SqliteStore) Get(id int) (types.Drawing) {
 	return formatSqlDrawing(sqlDrawing)
 }
 
-func (store *SqliteStore) Create(points []types.OriginalPoint) (int) {
+func (store *SqliteStore) Create(points []types.OriginalPoint, image string) (int) {
 	json, _ := json.Marshal(points)
 
-	result := store.DB.MustExec(`INSERT INTO drawings (originalPoints) VALUES (?)`, string(json[:]))
+	result := store.DB.MustExec(`INSERT INTO drawings (originalPoints, image) VALUES (?, ?)`, string(json[:]), image)
 	id, _ := result.LastInsertId()
 
 	return int(id)

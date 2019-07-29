@@ -12,6 +12,7 @@ func formatSqlDrawing(sqlDrawing SqlDrawing) types.Drawing {
 	drawing := types.Drawing{
 		Id: sqlDrawing.Id,
 		Featured: sqlDrawing.Featured,
+		Image: sqlDrawing.Image,
 		CalculatedDrawVectorCount: sqlDrawing.CalculatedDrawVectorCount,
 		CreatedAt: formatting.JSONTime(sqlDrawing.CreatedAt),
 	}
