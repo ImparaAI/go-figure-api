@@ -8,6 +8,16 @@ import (
 	"api/app/drawing/types"
 )
 
+func formatSqlDrawings(sqlDrawings []SqlDrawing) []types.Drawing {
+	drawings := []types.Drawing{}
+
+	for _, sqlDrawing := range sqlDrawings {
+		drawings = append(drawings, formatSqlDrawing(sqlDrawing))
+	}
+
+	return drawings
+}
+
 func formatSqlDrawing(sqlDrawing SqlDrawing) types.Drawing {
 	drawing := types.Drawing{
 		Id: sqlDrawing.Id,

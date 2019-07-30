@@ -47,8 +47,29 @@ Output:
 			{"n": -1, "real": 0.5, "imaginary": 2.7}
 		],
 	},
+	"image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAAAGQCAYAAABMPLOTAAAgAE...",
 	"dateCreated": "2020-01-01 12:00:00"
 }
+```
+
+### /drawings/recent
+Method: `GET`
+
+Output:
+
+```json
+[
+	{
+		"id": 2,
+		"image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAAAGQCAYAAABMPLOTAAAgAE...",
+		"dateCreated": "2020-01-01 12:00:00"
+	},
+	{
+		"id": 1,
+		"image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAAAGQCAYAAABMPLOTAAAgAE...",
+		"dateCreated": "2019-01-01 12:00:00"
+	}
+]
 ```
 
 ## Tests

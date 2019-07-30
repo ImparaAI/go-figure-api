@@ -33,7 +33,7 @@ func TestUnknownId(t *testing.T) {
 	assert.Equal(t, `{"message":"This drawing doesn't exist."}`, response.Body())
 }
 
-func TestFetchSuccess(t *testing.T) {
+func TestFetchOneSuccess(t *testing.T) {
 	points := []types.OriginalPoint{
 		types.OriginalPoint{X: 4, Y: 5, Time: 0},
 		types.OriginalPoint{X: 5, Y: 1, Time: 0.5},
@@ -50,7 +50,7 @@ func TestFetchSuccess(t *testing.T) {
 	drawing := store.Get(id)
 	createdAt := string(time.Time(drawing.CreatedAt).Format("2006-01-02T15:04:05-0700"))
 
-	json := json.Compact(`{
+	expectedJson := json.Compact(`{
 		"id": 1,
 		"featured": false,
 		"originalPoints": [
@@ -66,5 +66,5 @@ func TestFetchSuccess(t *testing.T) {
 		"lastDrawVectorCalculatedAt": null
 	}`)
 
-	assert.Equal(t, json, response.Body())
+	assert.Equal(t, expectedJson, response.Body())
 }

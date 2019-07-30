@@ -11,7 +11,7 @@ type SqliteStore struct {
 	DB *sqlx.DB
 }
 
-func (store *SqliteStore) Exists(id int) (bool) {
+func (store *SqliteStore) Exists(id int) bool {
 	var count int
 	err := store.DB.Get(&count, "SELECT COUNT(id) FROM drawings WHERE id = ?", id)
 
@@ -22,7 +22,7 @@ func (store *SqliteStore) Exists(id int) (bool) {
 	return count > 0
 }
 
-func (store *SqliteStore) Get(id int) (types.Drawing) {
+func (store *SqliteStore) Get(id int) types.Drawing {
 	var sqlDrawing SqlDrawing
 
 	err := store.DB.Get(&sqlDrawing, "SELECT * FROM drawings WHERE id = ?", id)
@@ -34,7 +34,19 @@ func (store *SqliteStore) Get(id int) (types.Drawing) {
 	return formatSqlDrawing(sqlDrawing)
 }
 
-func (store *SqliteStore) Create(points []types.OriginalPoint, image string) (int) {
+func (store *SqliteStore) GetRecent() []types.Drawing {
+	var sqlDrawings []SqlDrawing
+
+	err := store.DB.Select(&sqlDrawings, "SELECT * FROM drawings ORDER BY id DESC LIMIT 20")
+
+	if err != nil {
+		panic(err)
+	}
+
+	return formatSqlDrawings(sqlDrawings)
+}
+
+func (store *SqliteStore) Create(points []types.OriginalPoint, image string) int {
 	json, _ := json.Marshal(points)
 
 	result := store.DB.MustExec(`INSERT INTO drawings (originalPoints, image) VALUES (?, ?)`, string(json[:]), image)

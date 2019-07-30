@@ -16,5 +16,6 @@ func Register(e *echo.Echo) {
 
 func registerRoutes(e *echo.Echo) {
 	e.GET("drawing/:id", controllers.FetchOne, middleware.IdExists)
+	e.GET("drawings/recent", controllers.FetchRecent)
 	e.POST("drawing", controllers.Submit, middleware.SubmissionIsValid)
 }
