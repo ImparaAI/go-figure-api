@@ -26,6 +26,10 @@ func getDrawing(drawingId int) types.Drawing {
 func normalizeTime(originalPoints []types.OriginalPoint) {
 	finalPoint := originalPoints[len(originalPoints) - 1]
 
+	if finalPoint.Time == 0 {
+		return
+	}
+
 	for i := 0; i < len(originalPoints); i++ {
 		originalPoints[i].Time = originalPoints[i].Time / finalPoint.Time
 	}

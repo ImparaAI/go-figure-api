@@ -13,6 +13,36 @@ import (
 	"api/app/drawing/processing"
 )
 
+func TestOriginPoint(t *testing.T) {
+	store := store.New()
+	points := []types.OriginalPoint{types.OriginalPoint{Time: 0.00, X: 0, Y: 0}}
+	id := store.Create(points, "")
+	processing.Process(id)
+	result := store.Get(id)
+
+	expected := []types.DrawVector{
+		types.DrawVector{N: 0, Real: 0.00, Imaginary: 0.00},
+	}
+
+	assert.Equal(t, 1, len(result.DrawVectors))
+	assert.Equal(t, true, cmp.Equal(expected, result.DrawVectors, getVectorComparer(0.8)))
+}
+
+func TestNonOriginPoint(t *testing.T) {
+	store := store.New()
+	points := []types.OriginalPoint{types.OriginalPoint{Time: 0, X: 50, Y: 50}}
+	id := store.Create(points, "")
+	processing.Process(id)
+	result := store.Get(id)
+
+	expected := []types.DrawVector{
+		types.DrawVector{N: 0, Real: 50.00, Imaginary: 50.00},
+	}
+
+	assert.Equal(t, 1, len(result.DrawVectors))
+	assert.Equal(t, true, cmp.Equal(expected, result.DrawVectors, getVectorComparer(0.8)))
+}
+
 func TestCircle(t *testing.T) {
 	store := store.New()
 	radius := 100.00

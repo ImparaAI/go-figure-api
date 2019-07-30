@@ -29,6 +29,10 @@ func getNextN(n int) int {
 }
 
 func vectorsAproximateOriginal(vectors []types.DrawVector, originalPoints []types.OriginalPoint) bool {
+	if len(vectors) == 0 {
+		return false
+	}
+
 	averageDistance := getAverageDistance(originalPoints, vectors)
 
 	return averageDistance < 5
