@@ -86,7 +86,7 @@ func findOriginalPoint(time float64, originalPoints []types.OriginalPoint) (type
 			return originalPoint, i
 		}
 
-		if i != 0 && timeBetweenPoints(time, originalPoints[i-1] , originalPoint) {
+		if i != 0 && timeBetweenPoints(time, &originalPoints[i-1] , &originalPoint) {
 			p1 := originalPoints[i-1]
 			p2 := originalPoint
 
@@ -101,7 +101,7 @@ func findOriginalPoint(time float64, originalPoints []types.OriginalPoint) (type
 	return originalPoints[len(originalPoints) - 1], len(originalPoints) - 1
 }
 
-func timeBetweenPoints(time float64, p1, p2 types.OriginalPoint) bool {
+func timeBetweenPoints(time float64, p1, p2 *types.OriginalPoint) bool {
 	return util.FloatCompare(time, p1.Time, 0.001) == 1 && util.FloatCompare(time, p2.Time, 0.001) == -1
 }
 
