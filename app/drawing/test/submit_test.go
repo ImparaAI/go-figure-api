@@ -54,7 +54,6 @@ func TestEmptyPointsField(t *testing.T) {
 	response := requester.Post("/drawing", `{"points":[], "image": "image"}`)
 	assert.True(t, response.IsBadRequest())
 	assert.Equal(t, `{"message":"There needs to be at least 1 point."}`, response.Body())
-	assert.Equal(t, 1, 2)
 }
 
 func TestInvalidPoints(t *testing.T) {
