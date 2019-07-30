@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"strings"
 	"net/http"
 	"github.com/labstack/echo/v4"
 
@@ -13,8 +14,12 @@ func SubmissionIsValid(next echo.HandlerFunc) echo.HandlerFunc {
 		input := &types.SubmitInput{}
 		err := apphttp.BuildJson(c, input)
 
-		if (err != nil) || (input.Points == nil) || (input.Image == "") {
+		if (err != nil) || (input.Points == nil) {
 			return echo.NewHTTPError(http.StatusBadRequest, "The request is not properly formatted.")
+		}
+
+		if !strings.HasPrefix(input.Image, "data:image/png;") {
+			return echo.NewHTTPError(http.StatusBadRequest, "The image is invalid.")
 		}
 
 		if len(input.Points) == 0 {
