@@ -5,6 +5,8 @@ A Go backend service for the go figure [web app](https://github.com/ImparaAI/go-
 This application accepts a series of continuous points captured at even time intervals, and a requested number of draw vectors to calculate. The calculation job is put onto a queue that is processed continuously. Once the job is complete, the results are available at the drawing's uri as a list of vectors with *real* and *imaginary* parts that can then be animated.
 
 [![Build Status](https://travis-ci.org/ImparaAI/go-figure-api.png?branch=master)](https://travis-ci.org/ImparaAI/go-figure-api)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ImparaAI/go-figure-api)](https://goreportcard.com/report/github.com/ImparaAI/go-figure-api)
+
 
 ## Routes
 
