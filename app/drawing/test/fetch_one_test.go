@@ -42,7 +42,7 @@ func TestFetchOneSuccess(t *testing.T) {
 	}
 
 	store := store.New()
-	id := store.Create(points, "data:image/png;hiiamimage")
+	id := store.Create(points)
 
 	response := requester.Get("/drawing/" + strconv.Itoa(id))
 	assert.True(t, response.Ok())
@@ -59,7 +59,6 @@ func TestFetchOneSuccess(t *testing.T) {
 			{"x": 2, "y": 3, "time": 1.5},
 			{"x": 6, "y": 3, "time": 2.1}
 		],
-		"image": "data:image/png;hiiamimage",
 		"drawVectors": [],
 		"calculatedDrawVectorCount": 0,
 		"createdAt": "` + createdAt + `",

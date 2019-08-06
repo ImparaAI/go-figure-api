@@ -10,10 +10,9 @@ import (
 )
 
 func Submit(c echo.Context) error {
-	image, _ := c.Get("image").(string)
 	points, _ := c.Get("points").([]types.OriginalPoint)
 
-	id := store.New().Create(points, string(image))
+	id := store.New().Create(points)
 
 	processing.AddToQueue(id)
 

@@ -16,7 +16,7 @@ import (
 func TestOriginPoint(t *testing.T) {
 	store := store.New()
 	points := []types.OriginalPoint{types.OriginalPoint{Time: 0.00, X: 0, Y: 0}}
-	id := store.Create(points, "")
+	id := store.Create(points)
 	processing.Process(id)
 	result := store.Get(id)
 
@@ -31,7 +31,7 @@ func TestOriginPoint(t *testing.T) {
 func TestNonOriginPoint(t *testing.T) {
 	store := store.New()
 	points := []types.OriginalPoint{types.OriginalPoint{Time: 0, X: 50, Y: 50}}
-	id := store.Create(points, "")
+	id := store.Create(points)
 	processing.Process(id)
 	result := store.Get(id)
 
@@ -46,7 +46,7 @@ func TestNonOriginPoint(t *testing.T) {
 func TestCircle(t *testing.T) {
 	store := store.New()
 	radius := 100.00
-	id := store.Create(buildUnitCirclePoints(radius), "")
+	id := store.Create(buildUnitCirclePoints(radius))
 	processing.Process(id)
 	result := store.Get(id)
 
