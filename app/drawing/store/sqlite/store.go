@@ -34,16 +34,16 @@ func (store *SqliteStore) Get(id int) types.Drawing {
 	return formatSqlDrawing(sqlDrawing)
 }
 
-func (store *SqliteStore) GetRecent() []types.Drawing {
+func (store *SqliteStore) GetRecent() []types.DrawingPreview {
 	var sqlDrawings []SqlDrawing
 
-	err := store.DB.Select(&sqlDrawings, "SELECT * FROM drawings ORDER BY id DESC LIMIT 20")
+	err := store.DB.Select(&sqlDrawings, "SELECT id, originalPoints FROM drawings ORDER BY id DESC LIMIT 20")
 
 	if err != nil {
 		panic(err)
 	}
 
-	return formatSqlDrawings(sqlDrawings)
+	return formatSqlDrawingPreviews(sqlDrawings)
 }
 
 func (store *SqliteStore) Create(points []types.OriginalPoint) int {

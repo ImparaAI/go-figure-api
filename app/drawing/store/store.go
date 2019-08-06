@@ -15,7 +15,7 @@ func New() Store {
 type Store interface {
 	Exists(id int) bool
 	Get(id int) types.Drawing
-	GetRecent() []types.Drawing
+	GetRecent() []types.DrawingPreview
 	Create(points []types.OriginalPoint) int
 	AddVectors(drawingId int, vectors []types.DrawVector)
 }
