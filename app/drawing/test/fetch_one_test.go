@@ -35,10 +35,10 @@ func TestUnknownId(t *testing.T) {
 
 func TestFetchOneSuccess(t *testing.T) {
 	points := []types.OriginalPoint{
-		types.OriginalPoint{X: 4, Y: 5, Time: 0},
-		types.OriginalPoint{X: 5, Y: 1, Time: 0.5},
-		types.OriginalPoint{X: 2, Y: 3, Time: 1.5},
-		types.OriginalPoint{X: 6, Y: 3, Time: 2.1},
+		{X: 4, Y: 5, Time: 0},
+		{X: 5, Y: 1, Time: 0.5},
+		{X: 2, Y: 3, Time: 1.5},
+		{X: 6, Y: 3, Time: 2.1},
 	}
 
 	store := store.New()

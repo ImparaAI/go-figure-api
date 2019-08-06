@@ -15,13 +15,13 @@ import (
 
 func TestOriginPoint(t *testing.T) {
 	store := store.New()
-	points := []types.OriginalPoint{types.OriginalPoint{Time: 0.00, X: 0, Y: 0}}
+	points := []types.OriginalPoint{{Time: 0.00, X: 0, Y: 0}}
 	id := store.Create(points)
 	processing.Process(id)
 	result := store.Get(id)
 
 	expected := []types.DrawVector{
-		types.DrawVector{N: 0, Real: 0.00, Imaginary: 0.00},
+		{N: 0, Real: 0.00, Imaginary: 0.00},
 	}
 
 	assert.Equal(t, 1, len(result.DrawVectors))
@@ -30,13 +30,13 @@ func TestOriginPoint(t *testing.T) {
 
 func TestNonOriginPoint(t *testing.T) {
 	store := store.New()
-	points := []types.OriginalPoint{types.OriginalPoint{Time: 0, X: 50, Y: 50}}
+	points := []types.OriginalPoint{{Time: 0, X: 50, Y: 50}}
 	id := store.Create(points)
 	processing.Process(id)
 	result := store.Get(id)
 
 	expected := []types.DrawVector{
-		types.DrawVector{N: 0, Real: 50.00, Imaginary: 50.00},
+		{N: 0, Real: 50.00, Imaginary: 50.00},
 	}
 
 	assert.Equal(t, 1, len(result.DrawVectors))
@@ -51,8 +51,8 @@ func TestCircle(t *testing.T) {
 	result := store.Get(id)
 
 	expected := []types.DrawVector{
-		types.DrawVector{N: 0, Real: 0.00, Imaginary: 0.00},
-		types.DrawVector{N: 1, Real: radius, Imaginary: 0.00},
+		{N: 0, Real: 0.00, Imaginary: 0.00},
+		{N: 1, Real: radius, Imaginary: 0.00},
 	}
 
 	assert.Equal(t, 2, len(result.DrawVectors))

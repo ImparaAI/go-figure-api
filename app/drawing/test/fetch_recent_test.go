@@ -29,8 +29,8 @@ func TestFetchRecent(t *testing.T) {
 func createFetchRecentDrawingJson() string {
 	store := store.New()
 	points := []types.OriginalPoint{
-		types.OriginalPoint{X: 4, Y: 5, Time: 0},
-		types.OriginalPoint{X: 5, Y: 1, Time: 1},
+		{X: 4, Y: 5, Time: 0},
+		{X: 5, Y: 1, Time: 1},
 	}
 	id := store.Create(points)
 
