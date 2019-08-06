@@ -69,9 +69,9 @@ func getSchemaFilename() string {
 	if testing {
 		//todo: recurse up the pwd until you find correct file
 		return "/go/src/app/database/schema.sql"
-	} else {
-		return filepath.Join(pwd, "database", "schema.sql")
 	}
+
+	return filepath.Join(pwd, "database", "schema.sql")
 }
 
 func getDatabaseFilename() string {
@@ -79,7 +79,7 @@ func getDatabaseFilename() string {
 
 	if testing {
 		return filepath.Join(os.TempDir(), "test.db")
-	} else {
-		return filepath.Join(pwd, "database", "sqlite", "gofigure.db")
 	}
+
+	return filepath.Join(pwd, "database", "sqlite", "gofigure.db")
 }
