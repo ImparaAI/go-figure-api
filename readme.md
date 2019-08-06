@@ -49,7 +49,6 @@ Output:
 			{"n": -1, "real": 0.5, "imaginary": 2.7}
 		],
 	},
-	"image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAAAGQCAYAAABMPLOTAAAgAE...",
 	"dateCreated": "2020-01-01 12:00:00"
 }
 ```
@@ -63,13 +62,11 @@ Output:
 [
 	{
 		"id": 2,
-		"image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAAAGQCAYAAABMPLOTAAAgAE...",
-		"dateCreated": "2020-01-01 12:00:00"
+		"svgPath": "M 364 113 L 364 113 L 357 113 L 348 113 L 342 113 L 337 113 L 333..."
 	},
 	{
 		"id": 1,
-		"image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAAAGQCAYAAABMPLOTAAAgAE...",
-		"dateCreated": "2019-01-01 12:00:00"
+		"svgPath": "M 364 113 L 364 113 L 357 113 L 348 113 L 342 113 L 337 113 L 333..."
 	}
 ]
 ```
