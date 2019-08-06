@@ -1,12 +1,12 @@
 package controllers
 
 import (
-	"net/http"
 	"github.com/labstack/echo/v4"
+	"net/http"
 
+	"api/app/drawing/processing"
 	"api/app/drawing/store"
 	"api/app/drawing/types"
-	"api/app/drawing/processing"
 )
 
 func Submit(c echo.Context) error {

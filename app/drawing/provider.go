@@ -3,8 +3,8 @@ package drawing
 import (
 	"github.com/labstack/echo/v4"
 
-	"api/app/drawing/middleware"
 	"api/app/drawing/controllers"
+	"api/app/drawing/middleware"
 	"api/app/drawing/processing"
 )
 

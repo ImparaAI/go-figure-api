@@ -1,16 +1,16 @@
 package test
 
 import (
-	"time"
+	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
-	"github.com/stretchr/testify/assert"
+	"time"
 
+	"api/app/drawing/store"
+	"api/app/drawing/types"
 	"api/database"
 	"api/test/json"
 	"api/test/requester"
-	"api/app/drawing/types"
-	"api/app/drawing/store"
 )
 
 func TestNonIntegerId(t *testing.T) {

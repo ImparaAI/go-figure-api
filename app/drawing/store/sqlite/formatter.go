@@ -1,21 +1,21 @@
 package sqlite
 
 import (
-	"fmt"
-	"time"
-	"strings"
 	"encoding/json"
+	"fmt"
+	"strings"
+	"time"
 
-	"api/app/formatting"
 	"api/app/drawing/types"
+	"api/app/formatting"
 )
 
 func formatSqlDrawing(sqlDrawing SqlDrawing) types.Drawing {
 	drawing := types.Drawing{
-		Id: sqlDrawing.Id,
-		Featured: sqlDrawing.Featured,
+		Id:                        sqlDrawing.Id,
+		Featured:                  sqlDrawing.Featured,
 		CalculatedDrawVectorCount: sqlDrawing.CalculatedDrawVectorCount,
-		CreatedAt: formatting.JSONTime(sqlDrawing.CreatedAt),
+		CreatedAt:                 formatting.JSONTime(sqlDrawing.CreatedAt),
 	}
 
 	if sqlDrawing.LastDrawVectorCalculatedAt.Valid {
@@ -42,7 +42,7 @@ func formatSqlDrawingPreviews(sqlDrawings []SqlDrawing) []types.DrawingPreview {
 
 func formatSqlDrawingPreview(sqlDrawing SqlDrawing) types.DrawingPreview {
 	drawingPreview := types.DrawingPreview{
-		Id: sqlDrawing.Id,
+		Id:      sqlDrawing.Id,
 		SvgPath: buildSvgPath(sqlDrawing),
 	}
 
@@ -50,19 +50,19 @@ func formatSqlDrawingPreview(sqlDrawing SqlDrawing) types.DrawingPreview {
 }
 
 func buildSvgPath(sqlDrawing SqlDrawing) string {
-  var path strings.Builder
-  var originalPoints []types.OriginalPoint
+	var path strings.Builder
+	var originalPoints []types.OriginalPoint
 
 	path.Grow(len(originalPoints) * 10)
 	json.Unmarshal([]byte(sqlDrawing.OriginalPoints), &originalPoints)
 
 	for i, point := range originalPoints {
 		if i == 0 {
-    	fmt.Fprintf(&path, "M %d %d ", point.X, point.Y)
+			fmt.Fprintf(&path, "M %d %d ", point.X, point.Y)
 		} else {
-    	fmt.Fprintf(&path, "L %d %d ", point.X, point.Y)
+			fmt.Fprintf(&path, "L %d %d ", point.X, point.Y)
 		}
 	}
 
-  return path.String()
+	return path.String()
 }

@@ -1,15 +1,15 @@
 package test
 
 import (
+	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
-	"github.com/stretchr/testify/assert"
 
+	"api/app/drawing/store"
+	"api/app/drawing/types"
 	"api/database"
 	"api/test/json"
 	"api/test/requester"
-	"api/app/drawing/types"
-	"api/app/drawing/store"
 )
 
 func TestFetchRecent(t *testing.T) {

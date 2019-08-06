@@ -7,7 +7,7 @@ import (
 	"api/app/drawing"
 )
 
-func New() (*echo.Echo) {
+func New() *echo.Echo {
 	e := echo.New()
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

@@ -1,8 +1,8 @@
 package util
 
 import (
-	"math"
 	"github.com/google/go-cmp/cmp"
+	"math"
 )
 
 func FloatCompare(x float64, y float64, tolerance float64) int {
@@ -22,7 +22,7 @@ func FloatCompare(x float64, y float64, tolerance float64) int {
 func getFloatEqualityComparer(tolerance float64) cmp.Option {
 	return cmp.Comparer(func(x, y float64) bool {
 		diff := math.Abs(x - y)
-		mean := math.Abs(x + y) / 2.0
+		mean := math.Abs(x+y) / 2.0
 
 		if math.IsNaN(diff / mean) {
 			return true

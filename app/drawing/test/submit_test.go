@@ -1,9 +1,9 @@
 package test
 
 import (
+	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
-	"github.com/stretchr/testify/assert"
 
 	"api/database"
 	"api/test/requester"
@@ -36,7 +36,6 @@ func TestMissingPointsField(t *testing.T) {
 	assert.Equal(t, `{"message":"The request is not properly formatted."}`, response.Body())
 }
 
-
 func TestEmptyPointsField(t *testing.T) {
 	response := requester.Post("/drawing", `{"points":[]}`)
 	assert.True(t, response.IsBadRequest())
@@ -47,7 +46,7 @@ func TestInvalidPoints(t *testing.T) {
 	nonInts := []string{`"foo"`, "[]", "4.2"}
 
 	for _, val := range nonInts {
-		response := requester.Post("/drawing", `{"points":[` + val + `]}`)
+		response := requester.Post("/drawing", `{"points":[`+val+`]}`)
 		assert.True(t, response.IsBadRequest())
 		assert.Equal(t, `{"message":"The request is not properly formatted."}`, response.Body())
 	}

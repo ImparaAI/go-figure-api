@@ -1,17 +1,17 @@
 package database
 
 import (
-	"os"
-	"io/ioutil"
-	"path/filepath"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 )
 
 var persistentDb *sqlx.DB
 var testing = false
 
-func GetDb() (*sqlx.DB) {
+func GetDb() *sqlx.DB {
 	return persistentDb
 }
 

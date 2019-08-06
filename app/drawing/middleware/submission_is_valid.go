@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"net/http"
 	"github.com/labstack/echo/v4"
+	"net/http"
 
-	apphttp "api/app/http"
 	"api/app/drawing/types"
+	apphttp "api/app/http"
 )
 
 func SubmissionIsValid(next echo.HandlerFunc) echo.HandlerFunc {

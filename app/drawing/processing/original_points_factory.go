@@ -24,7 +24,7 @@ func getDrawing(drawingId int) types.Drawing {
 }
 
 func normalizeTime(originalPoints []types.OriginalPoint) {
-	finalPoint := originalPoints[len(originalPoints) - 1]
+	finalPoint := originalPoints[len(originalPoints)-1]
 
 	if finalPoint.Time == 0 {
 		return

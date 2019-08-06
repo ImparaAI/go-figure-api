@@ -1,16 +1,16 @@
 package test
 
 import (
-	"math"
-	"testing"
-	"math/cmplx"
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/assert"
+	"math"
+	"math/cmplx"
+	"testing"
 
-	"api/app/util"
-	"api/app/drawing/types"
-	"api/app/drawing/store"
 	"api/app/drawing/processing"
+	"api/app/drawing/store"
+	"api/app/drawing/types"
+	"api/app/util"
 )
 
 func TestOriginPoint(t *testing.T) {
@@ -59,15 +59,15 @@ func TestCircle(t *testing.T) {
 	assert.Equal(t, true, cmp.Equal(expected, result.DrawVectors, getVectorComparer(0.8)))
 }
 
-func buildUnitCirclePoints(radius float64) ([]types.OriginalPoint) {
+func buildUnitCirclePoints(radius float64) []types.OriginalPoint {
 	points := []types.OriginalPoint{}
 
 	for t := 0.00; util.FloatCompare(t, 1.00, 0.0001) <= 0; t += 0.001 {
-		vector := cmplx.Exp(complex(0.00, 2.00 * math.Pi * t))
+		vector := cmplx.Exp(complex(0.00, 2.00*math.Pi*t))
 		points = append(points, types.OriginalPoint{
 			Time: t,
-			X: int(real(vector) * radius),
-			Y: int(imag(vector) * radius),
+			X:    int(real(vector) * radius),
+			Y:    int(imag(vector) * radius),
 		})
 	}
 
@@ -80,14 +80,14 @@ func getVectorComparer(tolerance float64) cmp.Option {
 			return false
 		}
 
-		if math.Abs(a.Real - b.Real) > tolerance {
+		if math.Abs(a.Real-b.Real) > tolerance {
 			return false
 		}
 
-		if math.Abs(a.Imaginary - b.Imaginary) > tolerance {
+		if math.Abs(a.Imaginary-b.Imaginary) > tolerance {
 			return false
 		}
 
-		return true;
+		return true
 	})
 }

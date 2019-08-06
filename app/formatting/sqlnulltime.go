@@ -1,12 +1,12 @@
 package formatting
 
 import (
-	"time"
 	"database/sql/driver"
+	"time"
 )
 
 type SQLNullTime struct {
-	Time time.Time
+	Time  time.Time
 	Valid bool
 }
 

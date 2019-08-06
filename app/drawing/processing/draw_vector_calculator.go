@@ -4,8 +4,8 @@ import (
 	"math"
 	"math/cmplx"
 
-	"api/app/util"
 	"api/app/drawing/types"
+	"api/app/util"
 )
 
 func buildDrawVectors(originalPoints []types.OriginalPoint) []types.DrawVector {
@@ -14,7 +14,7 @@ func buildDrawVectors(originalPoints []types.OriginalPoint) []types.DrawVector {
 
 	for (len(vectors) < 100) && !vectorsAproximateOriginal(vectors, originalPoints) {
 		vectors = append(vectors, buildDrawVector(n, originalPoints))
-		n = getNextN(n);
+		n = getNextN(n)
 	}
 
 	return vectors
@@ -25,7 +25,7 @@ func getNextN(n int) int {
 		return -1 * n
 	}
 
-	return -1 * n + 1
+	return -1*n + 1
 }
 
 func vectorsAproximateOriginal(vectors []types.DrawVector, originalPoints []types.OriginalPoint) bool {
@@ -44,22 +44,22 @@ func getAverageDistance(originalPoints []types.OriginalPoint, vectors []types.Dr
 	for i := 0; i < len(originalPoints); i++ {
 		original := originalPoints[i]
 		estimate := calculateOutput(originalPoints[i].Time, vectors)
-		distance += math.Sqrt(math.Pow(real(estimate) - float64(original.X), 2) + math.Pow(imag(estimate) - float64(original.Y), 2))
+		distance += math.Sqrt(math.Pow(real(estimate)-float64(original.X), 2) + math.Pow(imag(estimate)-float64(original.Y), 2))
 	}
 
 	return distance / float64(len(originalPoints))
 }
 
 func calculateOutput(time float64, vectors []types.DrawVector) complex128 {
-	sum := complex(0, 0);
+	sum := complex(0, 0)
 
 	for _, vector := range vectors {
 		c := complex(vector.Real, vector.Imaginary)
-		power := complex(0.00, float64(vector.N) * 2.00 * math.Pi * time)
+		power := complex(0.00, float64(vector.N)*2.00*math.Pi*time)
 		sum += c * cmplx.Exp(power)
 	}
 
-	return sum;
+	return sum
 }
 
 func buildDrawVector(n int, originalPoints []types.OriginalPoint) types.DrawVector {
@@ -72,7 +72,7 @@ func buildDrawVector(n int, originalPoints []types.OriginalPoint) types.DrawVect
 	for util.FloatCompare(time, 1.00, 0.0001) < 0 {
 		originalPoint, originalPointsIndex = findOriginalPoint(time, originalPoints[originalPointsIndex:])
 		originalComplexValue := complex(float64(originalPoint.X), float64(originalPoint.Y))
-		cumulativeValue += originalComplexValue * cmplx.Exp(complex(0.00, float64(-n) * 2.0 * math.Pi * time)) * complex(timeDelta, 0)
+		cumulativeValue += originalComplexValue * cmplx.Exp(complex(0.00, float64(-n)*2.0*math.Pi*time)) * complex(timeDelta, 0)
 
 		time += timeDelta
 	}
@@ -86,19 +86,19 @@ func findOriginalPoint(time float64, originalPoints []types.OriginalPoint) (type
 			return originalPoint, i
 		}
 
-		if i != 0 && timeBetweenPoints(time, &originalPoints[i-1] , &originalPoint) {
+		if i != 0 && timeBetweenPoints(time, &originalPoints[i-1], &originalPoint) {
 			p1 := originalPoints[i-1]
 			p2 := originalPoint
 
 			return types.OriginalPoint{
 				Time: time,
-				X: int(getLinearAverage(time, p1.Time, p2.Time, p1.X, p2.X)),
-				Y: int(getLinearAverage(time, p1.Time, p2.Time, p1.Y, p2.Y)),
+				X:    int(getLinearAverage(time, p1.Time, p2.Time, p1.X, p2.X)),
+				Y:    int(getLinearAverage(time, p1.Time, p2.Time, p1.Y, p2.Y)),
 			}, i - 1
 		}
 	}
 
-	return originalPoints[len(originalPoints) - 1], len(originalPoints) - 1
+	return originalPoints[len(originalPoints)-1], len(originalPoints) - 1
 }
 
 func timeBetweenPoints(time float64, p1, p2 *types.OriginalPoint) bool {
@@ -106,8 +106,8 @@ func timeBetweenPoints(time float64, p1, p2 *types.OriginalPoint) bool {
 }
 
 func getLinearAverage(input float64, x1, x2 float64, y1, y2 int) float64 {
-	slope := float64(y2 - y1) / (x2 - x1)
-	intercept := float64(y2) - slope * x2
+	slope := float64(y2-y1) / (x2 - x1)
+	intercept := float64(y2) - slope*x2
 
-	return slope * input + intercept
+	return slope*input + intercept
 }

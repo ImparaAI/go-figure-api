@@ -2,9 +2,9 @@ package http
 
 import (
 	"bytes"
-	"io/ioutil"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
+	"io/ioutil"
 )
 
 func BuildJson(c echo.Context, inputMap interface{}) error {

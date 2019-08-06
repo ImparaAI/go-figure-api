@@ -1,9 +1,9 @@
 package store
 
 import (
-	"api/database"
-	"api/app/drawing/types"
 	"api/app/drawing/store/sqlite"
+	"api/app/drawing/types"
+	"api/database"
 )
 
 func New() Store {
