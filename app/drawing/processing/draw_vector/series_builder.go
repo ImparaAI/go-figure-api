@@ -35,7 +35,7 @@ func vectorsAproximateOriginal(vectors []types.DrawVector, originalPoints []type
 
 	averageDistance := getAverageDistance(originalPoints, vectors)
 
-	return averageDistance < 5
+	return averageDistance < 1
 }
 
 func getAverageDistance(originalPoints []types.OriginalPoint, vectors []types.DrawVector) float64 {
