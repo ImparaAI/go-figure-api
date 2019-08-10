@@ -3,11 +3,14 @@ package processing
 import (
 	"api/app/drawing/store"
 	"api/app/drawing/types"
+	"api/app/drawing/processing/draw_vector"
 )
 
 func Process(drawingId int) {
-	originalPoints := buildOriginalPoints(drawingId)
-	vectors := buildDrawVectors(originalPoints)
+	var originalPointsFactory OriginalPointsFactory = OriginalPointsFactory{}
+
+	originalPoints := originalPointsFactory.Build(drawingId)
+	vectors := draw_vector.BuildSeries(originalPoints)
 
 	saveDrawVectors(drawingId, vectors)
 }

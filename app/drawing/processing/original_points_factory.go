@@ -5,14 +5,16 @@ import (
 	"api/app/drawing/types"
 )
 
-func buildOriginalPoints(drawingId int) []types.OriginalPoint {
-	drawing := getDrawing(drawingId)
-	normalizeTime(drawing.OriginalPoints)
+type OriginalPointsFactory struct {}
+
+func (factory OriginalPointsFactory) Build(drawingId int) []types.OriginalPoint {
+	drawing := factory.getDrawing(drawingId)
+	factory.normalizeTime(drawing.OriginalPoints)
 
 	return drawing.OriginalPoints
 }
 
-func getDrawing(drawingId int) types.Drawing {
+func (factory OriginalPointsFactory) getDrawing(drawingId int) types.Drawing {
 	store := store.New()
 	drawing := store.Get(drawingId)
 
@@ -23,7 +25,7 @@ func getDrawing(drawingId int) types.Drawing {
 	return drawing
 }
 
-func normalizeTime(originalPoints []types.OriginalPoint) {
+func (factory OriginalPointsFactory) normalizeTime(originalPoints []types.OriginalPoint) {
 	finalPoint := originalPoints[len(originalPoints)-1]
 
 	if finalPoint.Time == 0 {
