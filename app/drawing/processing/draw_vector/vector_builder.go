@@ -46,7 +46,7 @@ func findOriginalPoint(time float64) (types.OriginalPoint) {
 			p1 := originalPoints[i - 1]
 			p2 := originalPoint
 
-			currentOriginalPointsIndex = i + 1
+			currentOriginalPointsIndex = i - 1
 
 			return types.OriginalPoint{
 				Time: time,
