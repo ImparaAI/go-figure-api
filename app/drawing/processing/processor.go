@@ -1,9 +1,9 @@
 package processing
 
 import (
+	"api/app/drawing/processing/draw_vector"
 	"api/app/drawing/store"
 	"api/app/drawing/types"
-	"api/app/drawing/processing/draw_vector"
 )
 
 func Process(drawingId int) {

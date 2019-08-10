@@ -5,7 +5,7 @@ import (
 	"api/app/drawing/types"
 )
 
-type OriginalPointsFactory struct {}
+type OriginalPointsFactory struct{}
 
 func (factory OriginalPointsFactory) Build(drawingId int) []types.OriginalPoint {
 	drawing := factory.getDrawing(drawingId)

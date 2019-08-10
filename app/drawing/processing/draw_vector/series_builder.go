@@ -44,7 +44,7 @@ func getAverageDistance(originalPoints []types.OriginalPoint, vectors []types.Dr
 	for i := 0; i < len(originalPoints); i++ {
 		original := originalPoints[i]
 		estimate := calculateOutput(originalPoints[i].Time, vectors)
-		distance += math.Sqrt(math.Pow(real(estimate) - float64(original.X), 2) + math.Pow(imag(estimate) - float64(original.Y), 2))
+		distance += math.Sqrt(math.Pow(real(estimate)-float64(original.X), 2) + math.Pow(imag(estimate)-float64(original.Y), 2))
 	}
 
 	return distance / float64(len(originalPoints))
@@ -55,7 +55,7 @@ func calculateOutput(time float64, vectors []types.DrawVector) complex128 {
 
 	for _, vector := range vectors {
 		c := complex(vector.Real, vector.Imaginary)
-		power := complex(0.00, float64(vector.N) * 2.00 * math.Pi * time)
+		power := complex(0.00, float64(vector.N)*2.00*math.Pi*time)
 		sum += c * cmplx.Exp(power)
 	}
 
