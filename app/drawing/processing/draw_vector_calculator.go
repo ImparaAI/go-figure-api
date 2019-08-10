@@ -25,7 +25,7 @@ func getNextN(n int) int {
 		return -1 * n
 	}
 
-	return -1*n + 1
+	return (-1 * n) + 1
 }
 
 func vectorsAproximateOriginal(vectors []types.DrawVector, originalPoints []types.OriginalPoint) bool {
@@ -44,7 +44,7 @@ func getAverageDistance(originalPoints []types.OriginalPoint, vectors []types.Dr
 	for i := 0; i < len(originalPoints); i++ {
 		original := originalPoints[i]
 		estimate := calculateOutput(originalPoints[i].Time, vectors)
-		distance += math.Sqrt(math.Pow(real(estimate)-float64(original.X), 2) + math.Pow(imag(estimate)-float64(original.Y), 2))
+		distance += math.Sqrt(math.Pow(real(estimate) - float64(original.X), 2) + math.Pow(imag(estimate) - float64(original.Y), 2))
 	}
 
 	return distance / float64(len(originalPoints))
@@ -55,7 +55,7 @@ func calculateOutput(time float64, vectors []types.DrawVector) complex128 {
 
 	for _, vector := range vectors {
 		c := complex(vector.Real, vector.Imaginary)
-		power := complex(0.00, float64(vector.N)*2.00*math.Pi*time)
+		power := complex(0.00, float64(vector.N) * 2.00 * math.Pi * time)
 		sum += c * cmplx.Exp(power)
 	}
 
@@ -72,7 +72,7 @@ func buildDrawVector(n int, originalPoints []types.OriginalPoint) types.DrawVect
 	for util.FloatCompare(time, 1.00, 0.0001) < 0 {
 		originalPoint, originalPointsIndex = findOriginalPoint(time, originalPoints[originalPointsIndex:])
 		originalComplexValue := complex(float64(originalPoint.X), float64(originalPoint.Y))
-		cumulativeValue += originalComplexValue * cmplx.Exp(complex(0.00, float64(-n)*2.0*math.Pi*time)) * complex(timeDelta, 0)
+		cumulativeValue += originalComplexValue * cmplx.Exp(complex(0.00, float64(-n) * 2.0 * math.Pi * time)) * complex(timeDelta, 0)
 
 		time += timeDelta
 	}
