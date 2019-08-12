@@ -36,6 +36,6 @@ func createFetchRecentDrawingJson() string {
 
 	return `{
 		"id": ` + strconv.Itoa(id) + `,
-		"svgPath": "M 4 5 L 5 1 "
+		"svgPath": "M 4 5 L 5 1 Z"
 	}`
 }

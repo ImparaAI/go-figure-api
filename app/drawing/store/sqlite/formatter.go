@@ -64,5 +64,7 @@ func buildSvgPath(sqlDrawing SqlDrawing) string {
 		}
 	}
 
+	fmt.Fprint(&path, "Z")
+
 	return path.String()
 }
