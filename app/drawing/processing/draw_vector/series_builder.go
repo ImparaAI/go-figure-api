@@ -10,9 +10,10 @@ import (
 func BuildSeries(originalPoints []types.OriginalPoint) []types.DrawVector {
 	n := 0
 	vectors := []types.DrawVector{}
+	vectorBuilder := VectorBuilder{}
 
 	for (len(vectors) < 100) && !vectorsAproximateOriginal(vectors, originalPoints) {
-		vectors = append(vectors, buildDrawVector(n, originalPoints))
+		vectors = append(vectors, vectorBuilder.Build(n, originalPoints))
 
 		n = getNextN(n)
 	}
