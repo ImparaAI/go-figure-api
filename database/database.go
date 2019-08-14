@@ -2,7 +2,7 @@ package database
 
 import (
 	"github.com/jmoiron/sqlx"
-	_ "github.com/mattn/go-sqlite3" // Register sqlite db driver
+	_ "github.com/go-sql-driver/mysql"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -17,11 +17,13 @@ func GetDb() *sqlx.DB {
 
 func Initialize() error {
 	var err error
-	persistentDb, err = openDb()
+	persistentDb, err = openConnection()
 
 	if err != nil {
 		return err
 	}
+
+	createDatabase()
 
 	return runMigrations()
 }
@@ -40,14 +42,29 @@ func ClearTestingDb() {
 	}
 }
 
-func openDb() (*sqlx.DB, error) {
-	filename := getDatabaseFilename()
+func openConnection() (*sqlx.DB, error) {
+	connStr := "root@tcp(mysql:3306)/?parseTime=true"
+
+	return sqlx.Connect("mysql", connStr)
+}
+
+func createDatabase() {
+	dbName := getDbName()
 
 	if testing {
-		os.Remove(filename)
+		persistentDb.MustExec("DROP DATABASE IF EXISTS " + dbName)
 	}
 
-	return sqlx.Connect("sqlite3", filename)
+	persistentDb.MustExec("CREATE DATABASE IF NOT EXISTS " + dbName)
+	persistentDb.MustExec("USE " + dbName)
+}
+
+func getDbName() string {
+	if testing {
+		return "test"
+	} else {
+		return "gofigure"
+	}
 }
 
 func runMigrations() error {
@@ -67,19 +84,10 @@ func getSchemaFilename() string {
 	pwd, _ := os.Getwd()
 
 	if testing {
+
 		//todo: recurse up the pwd until you find correct file
 		return "/go/src/app/database/schema.sql"
 	}
 
 	return filepath.Join(pwd, "database", "schema.sql")
-}
-
-func getDatabaseFilename() string {
-	pwd, _ := os.Getwd()
-
-	if testing {
-		return filepath.Join(os.TempDir(), "test.db")
-	}
-
-	return filepath.Join(pwd, "database", "sqlite", "gofigure.db")
 }

@@ -1,4 +1,4 @@
-package sqlite
+package mysql
 
 import (
 	"api/app/formatting"

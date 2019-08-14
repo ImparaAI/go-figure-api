@@ -73,4 +73,14 @@ Output:
 
 ## Tests
 
-Run `go test ./.../test`.
+Tests require the presence of a mysql database connection. You can easily get this by running this from the project root:
+
+```cli
+docker-compose up
+```
+
+Then run the tests like:
+
+```cli
+docker-compose exec api sh -c "go test -v ./.../test"
+```

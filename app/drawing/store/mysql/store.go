@@ -1,4 +1,4 @@
-package sqlite
+package mysql
 
 import (
 	"encoding/json"
@@ -7,11 +7,11 @@ import (
 	"api/app/drawing/types"
 )
 
-type SqliteStore struct {
+type MySqlStore struct {
 	DB *sqlx.DB
 }
 
-func (store *SqliteStore) Exists(id int) bool {
+func (store *MySqlStore) Exists(id int) bool {
 	var count int
 	err := store.DB.Get(&count, "SELECT COUNT(id) FROM drawings WHERE id = ?", id)
 
@@ -22,7 +22,7 @@ func (store *SqliteStore) Exists(id int) bool {
 	return count > 0
 }
 
-func (store *SqliteStore) Get(id int) types.Drawing {
+func (store *MySqlStore) Get(id int) types.Drawing {
 	var sqlDrawing SqlDrawing
 
 	err := store.DB.Get(&sqlDrawing, "SELECT * FROM drawings WHERE id = ?", id)
@@ -34,7 +34,7 @@ func (store *SqliteStore) Get(id int) types.Drawing {
 	return formatSqlDrawing(sqlDrawing)
 }
 
-func (store *SqliteStore) GetRecent() []types.DrawingPreview {
+func (store *MySqlStore) GetRecent() []types.DrawingPreview {
 	var sqlDrawings []SqlDrawing
 
 	err := store.DB.Select(&sqlDrawings, "SELECT id, originalPoints FROM drawings ORDER BY id DESC LIMIT 20")
@@ -46,16 +46,16 @@ func (store *SqliteStore) GetRecent() []types.DrawingPreview {
 	return formatSqlDrawingPreviews(sqlDrawings)
 }
 
-func (store *SqliteStore) Create(points []types.OriginalPoint) int {
+func (store *MySqlStore) Create(points []types.OriginalPoint) int {
 	json, _ := json.Marshal(points)
 
-	result := store.DB.MustExec(`INSERT INTO drawings (originalPoints) VALUES (?)`, string(json[:]))
+	result := store.DB.MustExec(`INSERT INTO drawings (originalPoints, drawVectors) VALUES (?, '[]')`, string(json[:]))
 	id, _ := result.LastInsertId()
 
 	return int(id)
 }
 
-func (store *SqliteStore) AddVectors(drawingId int, vectors []types.DrawVector) {
+func (store *MySqlStore) AddVectors(drawingId int, vectors []types.DrawVector) {
 	json, _ := json.Marshal(vectors)
 
 	store.DB.MustExec("UPDATE drawings SET drawVectors = ? WHERE id = ?", string(json), drawingId)

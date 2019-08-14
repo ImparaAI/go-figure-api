@@ -8,7 +8,6 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/reposit
     gcc \
     libc-dev \
     supervisor \
-    sqlite \
     git
 
 # Set up gin development tool

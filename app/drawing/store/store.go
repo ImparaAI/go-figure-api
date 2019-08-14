@@ -1,13 +1,13 @@
 package store
 
 import (
-	"api/app/drawing/store/sqlite"
+	"api/app/drawing/store/mysql"
 	"api/app/drawing/types"
 	"api/database"
 )
 
 func New() Store {
-	var store Store = &sqlite.SqliteStore{database.GetDb()}
+	var store Store = &mysql.MySqlStore{database.GetDb()}
 
 	return store
 }
