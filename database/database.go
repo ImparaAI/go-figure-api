@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 var persistentDb *sqlx.DB
@@ -23,6 +24,7 @@ func Initialize() error {
 		return err
 	}
 
+	configureConnection()
 	createDatabase()
 
 	return runMigrations()
@@ -46,6 +48,12 @@ func openConnection() (*sqlx.DB, error) {
 	connStr := "root@tcp(mysql:3306)/?parseTime=true"
 
 	return sqlx.Connect("mysql", connStr)
+}
+
+func configureConnection() {
+	persistentDb.SetConnMaxLifetime(time.Minute*5);
+	persistentDb.SetMaxIdleConns(5);
+	persistentDb.SetMaxOpenConns(5);
 }
 
 func createDatabase() {
