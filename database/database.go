@@ -17,17 +17,15 @@ func GetDb() *sqlx.DB {
 }
 
 func Initialize() error {
-	var err error
-	persistentDb, err = openConnection()
+	err := createDatabase()
 
 	if err != nil {
 		return err
 	}
 
-	configureConnection()
-	createDatabase()
+	persistentDb, err = openConnection(getDbName())
 
-	return runMigrations()
+	return err
 }
 
 func SetTestingEnvironment() {
@@ -44,27 +42,45 @@ func ClearTestingDb() {
 	}
 }
 
-func openConnection() (*sqlx.DB, error) {
-	connStr := "root@tcp(mysql:3306)/?parseTime=true"
+func openConnection(databaseName string) (*sqlx.DB, error) {
+	connStr := "root:password@tcp(mysql:3306)/" + databaseName + "?parseTime=true"
 
-	return sqlx.Connect("mysql", connStr)
+	connection, err := sqlx.Connect("mysql", connStr)
+
+	if err == nil {
+		connection.SetConnMaxLifetime(time.Minute*5);
+		connection.SetMaxIdleConns(5);
+		connection.SetMaxOpenConns(5);
+	}
+
+	return connection, err
 }
 
-func configureConnection() {
-	persistentDb.SetConnMaxLifetime(time.Minute*5);
-	persistentDb.SetMaxIdleConns(5);
-	persistentDb.SetMaxOpenConns(5);
-}
+func createDatabase() error {
+	connection, err := openConnection("")
 
-func createDatabase() {
+	if err != nil {
+		return err
+	}
+
 	dbName := getDbName()
 
 	if testing {
-		persistentDb.MustExec("DROP DATABASE IF EXISTS " + dbName)
+		connection.MustExec("DROP DATABASE IF EXISTS " + dbName)
 	}
 
-	persistentDb.MustExec("CREATE DATABASE IF NOT EXISTS " + dbName)
-	persistentDb.MustExec("USE " + dbName)
+	connection.MustExec("CREATE DATABASE IF NOT EXISTS " + dbName)
+	connection.MustExec("USE " + dbName)
+
+	err = runMigrations(connection)
+
+	if err != nil {
+		return err
+	}
+
+	connection.Close()
+
+	return nil
 }
 
 func getDbName() string {
@@ -75,7 +91,7 @@ func getDbName() string {
 	}
 }
 
-func runMigrations() error {
+func runMigrations(connection *sqlx.DB) error {
 	filename := getSchemaFilename()
 	file, err := ioutil.ReadFile(filename)
 
@@ -83,7 +99,7 @@ func runMigrations() error {
 		return err
 	}
 
-	_, err = persistentDb.Exec(string(file))
+	_, err = connection.Exec(string(file))
 
 	return err
 }
