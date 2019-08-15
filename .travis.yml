@@ -7,9 +7,6 @@ env:
 cache:
   directories:
   - $HOME/google-cloud-sdk
-before_install:
-  - openssl aes-256-cbc -K $encrypted_12c8071d2874_key -iv $encrypted_12c8071d2874_iv -in gce-deploy-service-account.json.enc -out gce-deploy-service-account.json -d
-  - ls -la .
 before_script:
   - docker-compose up -d
   - sleep 10
