@@ -79,7 +79,7 @@ Tests require the presence of a mysql database connection. You can easily get th
 docker-compose up
 ```
 
-Then run the tests like:
+Wait for the mysql container spin up and then run the tests like:
 
 ```cli
 docker-compose exec api sh -c "go test -v ./.../test"
