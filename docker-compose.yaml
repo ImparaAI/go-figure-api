@@ -6,5 +6,6 @@ services:
       - MYSQL_ROOT_PASSWORD=password
   api:
     build: .
+    image: imparaai/go-figure-api
     depends_on:
       - mysql
