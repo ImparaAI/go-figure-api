@@ -7,7 +7,7 @@ before_install:
 script:
   - docker-compose exec api /bin/sh -c "go test -v ./.../test"
 deploy:
-  proivder: script
+  provider: script
   script: bash dockerhub_push
   on:
     branch: master
