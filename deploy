@@ -9,6 +9,9 @@ fi
 
 source $HOME/google-cloud-sdk/path.bash.inc
 gcloud components update kubectl
+
+ls -la .
+
 gcloud auth activate-service-account --key-file gce-deploy-service-account.json
 
 gcloud container clusters get-credentials go-figure --zone us-central1-a --project imparaai-sergio
