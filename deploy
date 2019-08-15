@@ -14,4 +14,4 @@ gcloud components update kubectl
 gcloud auth activate-service-account --key-file gce-deploy-service-account.json
 
 gcloud container clusters get-credentials go-figure --zone us-central1-a --project imparaai-sergio
-gcloud auth configure-docker
+kubectl patch deployment api -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"date\":\"`date +'%s'`\"}}}}}"
