@@ -1,8 +1,8 @@
 package database
 
 import (
-	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -48,9 +48,9 @@ func openConnection(databaseName string) (*sqlx.DB, error) {
 	connection, err := sqlx.Connect("mysql", connStr)
 
 	if err == nil {
-		connection.SetConnMaxLifetime(time.Minute*5);
-		connection.SetMaxIdleConns(5);
-		connection.SetMaxOpenConns(5);
+		connection.SetConnMaxLifetime(time.Minute * 5)
+		connection.SetMaxIdleConns(5)
+		connection.SetMaxOpenConns(5)
 	}
 
 	return connection, err

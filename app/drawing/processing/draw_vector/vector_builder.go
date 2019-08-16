@@ -10,7 +10,7 @@ import (
 
 type VectorBuilder struct {
 	currentOriginalPointsIndex int
-	originalPoints []types.OriginalPoint
+	originalPoints             []types.OriginalPoint
 }
 
 func (vectorBuilder *VectorBuilder) Build(n int, providedOriginalPoints []types.OriginalPoint) types.DrawVector {
