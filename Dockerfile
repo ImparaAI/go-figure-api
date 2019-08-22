@@ -16,6 +16,7 @@ RUN go get -v github.com/codegangsta/gin
 ENV GIN_BIN=/../../../tmp/gin-bin
 ENV GIN_PORT=8080
 ENV BIN_APP_PORT=8081
+ENV DEVELOPMENT=true
 
 WORKDIR $GOPATH/src/app
 

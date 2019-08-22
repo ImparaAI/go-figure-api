@@ -9,8 +9,6 @@ if [ $DEVELOPMENT == "true" ]; then
 
   gin run main.go
 else
-  sleep 2s
-
   touch /var/healthy
 
   /bin/app
