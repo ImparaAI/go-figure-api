@@ -25,6 +25,7 @@ COPY docker/start.sh /bin/original_start.sh
 
 # Turn on Go 1.11 Modules and build
 ENV GO111MODULE=on
+ENV CGO_ENABLED=0
 RUN go build -o /bin/app
 
 # Set up start script
@@ -37,10 +38,10 @@ ENV APP_PORT=8080
 ENTRYPOINT ["/bin/start.sh"]
 
 # Production build
-FROM scratch AS final
+FROM alpine AS final
 
-COPY --from=builder /bin/start.sh /bin
-COPY --from=builder /bin/app /bin
+COPY --from=builder /bin/start.sh /bin/start.sh
+COPY --from=builder /bin/app /bin/app
 
 WORKDIR /
 
