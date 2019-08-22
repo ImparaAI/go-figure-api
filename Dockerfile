@@ -1,4 +1,4 @@
-FROM golang:1.12-alpine
+FROM golang:1.12-alpine as builder
 
 # Install packages
 RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
@@ -7,7 +7,6 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/reposit
   apk --no-cache add \
     gcc \
     libc-dev \
-    supervisor \
     git
 
 # Set up gin development tool
@@ -22,7 +21,6 @@ WORKDIR $GOPATH/src/app
 
 COPY . .
 COPY docker/start.sh /bin/original_start.sh
-COPY docker/conf/supervisord.conf /etc/supervisor.d/supervisord.ini
 
 # Turn on Go 1.11 Modules and build
 ENV GO111MODULE=on
@@ -35,6 +33,16 @@ RUN tr -d '\r' < /bin/original_start.sh > /bin/start.sh && \
 # Set application port env var
 ENV APP_PORT=8080
 
-EXPOSE 8080
-
 ENTRYPOINT ["/bin/start.sh"]
+
+# Production build
+FROM scratch AS final
+
+COPY --from=builder /bin/start.sh /bin
+COPY --from=builder /bin/app /bin
+
+WORKDIR /
+
+ENV APP_PORT=8080
+
+EXPOSE 8080

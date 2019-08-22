@@ -13,5 +13,5 @@ else
 
   touch /var/healthy
 
-  supervisord -c '/etc/supervisor.d/supervisord.ini'
+  /bin/app
 fi
