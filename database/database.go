@@ -3,9 +3,6 @@ package database
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"io/ioutil"
-	"os"
-	"path/filepath"
 	"time"
 )
 
@@ -92,26 +89,7 @@ func getDbName() string {
 }
 
 func runMigrations(connection *sqlx.DB) error {
-	filename := getSchemaFilename()
-	file, err := ioutil.ReadFile(filename)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = connection.Exec(string(file))
+	_, err := connection.Exec(Schema)
 
 	return err
-}
-
-func getSchemaFilename() string {
-	pwd, _ := os.Getwd()
-
-	if testing {
-
-		//todo: recurse up the pwd until you find correct file
-		return "/go/src/app/database/schema.sql"
-	}
-
-	return filepath.Join(pwd, "database", "schema.sql")
 }
