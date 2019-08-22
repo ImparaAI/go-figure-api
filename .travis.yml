@@ -9,6 +9,7 @@ cache:
   - $HOME/google-cloud-sdk
 before_script:
   - docker build --target builder -t imparaai/go-figure-api:dev .
+  - docker build -t imparaai/go-figure-api .
   - docker-compose up -d
   - sleep 10
 script:

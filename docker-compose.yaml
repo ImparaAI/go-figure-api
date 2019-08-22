@@ -5,7 +5,6 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=password
   api:
-    build: .
-    image: imparaai/go-figure-api
+    image: imparaai/go-figure-api:dev
     depends_on:
       - mysql
