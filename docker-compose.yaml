@@ -3,8 +3,10 @@ services:
   mysql:
     image: mysql:8
     environment:
-      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=testing
   api:
     image: imparaai/go-figure-api:dev
+    environment:
+      - DB_PASSWORD=testing
     depends_on:
       - mysql

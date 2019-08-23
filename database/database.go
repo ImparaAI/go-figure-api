@@ -4,6 +4,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"time"
+	"os"
 )
 
 var persistentDb *sqlx.DB
@@ -40,7 +41,8 @@ func ClearTestingDb() {
 }
 
 func openConnection(databaseName string) (*sqlx.DB, error) {
-	connStr := "root:password@tcp(mysql:3306)/" + databaseName + "?parseTime=true"
+	password := os.Getenv("DB_PASSWORD")
+	connStr := "root:" + password + "@tcp(mysql:3306)/" + databaseName + "?parseTime=true"
 
 	connection, err := sqlx.Connect("mysql", connStr)
 
