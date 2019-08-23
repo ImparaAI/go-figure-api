@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS drawings (
   featured tinyint NOT NULL DEFAULT 0,
   originalPoints text NOT NULL,
   drawVectors text NOT NULL,
-  calculatedDrawVectorCount int unsigned NOT NULL DEFAULT 0,
   createdAt datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   lastDrawVectorCalculatedAt datetime NULL DEFAULT NULL,
   PRIMARY KEY (id),
