@@ -12,9 +12,9 @@ import (
 
 func formatSqlDrawing(sqlDrawing SqlDrawing) types.Drawing {
 	drawing := types.Drawing{
-		Id:                        sqlDrawing.Id,
-		Featured:                  sqlDrawing.Featured,
-		CreatedAt:                 formatting.JSONTime(sqlDrawing.CreatedAt),
+		Id:        sqlDrawing.Id,
+		Featured:  sqlDrawing.Featured,
+		CreatedAt: formatting.JSONTime(sqlDrawing.CreatedAt),
 	}
 
 	if sqlDrawing.LastDrawVectorCalculatedAt.Valid {

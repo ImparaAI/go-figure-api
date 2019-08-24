@@ -1,8 +1,8 @@
 package health
 
 import (
-	"net/http"
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 func Register(e *echo.Echo) {
