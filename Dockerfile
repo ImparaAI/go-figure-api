@@ -12,7 +12,7 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/reposit
 # Set up gin development tool
 WORKDIR $GOPATH/src
 
-#RUN go get -v github.com/codegangsta/gin
+RUN go get -v github.com/codegangsta/gin
 ENV GIN_BIN=/../../../tmp/gin-bin
 ENV GIN_PORT=8080
 ENV BIN_APP_PORT=8081
