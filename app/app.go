@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"api/app/drawing"
+	"api/app/health"
 )
 
 func New() *echo.Echo {
@@ -22,4 +23,5 @@ func New() *echo.Echo {
 
 func registerServices(e *echo.Echo) {
 	drawing.Register(e)
+	health.Register(e)
 }
