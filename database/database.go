@@ -5,6 +5,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"os"
 	"time"
+	"fmt"
 )
 
 var persistentDb *sqlx.DB
@@ -41,8 +42,9 @@ func ClearTestingDb() {
 }
 
 func openConnection(databaseName string) (*sqlx.DB, error) {
+	connection := os.Getenv("DB_CONNECTION")
 	password := os.Getenv("DB_PASSWORD")
-	connStr := "root:" + password + "@tcp(mysql:3306)/" + databaseName + "?parseTime=true"
+	connStr := fmt.Sprintf("root:%s@%s/%s?parseTime=true", password, connection, databaseName)
 
 	connection, err := sqlx.Connect("mysql", connStr)
 
