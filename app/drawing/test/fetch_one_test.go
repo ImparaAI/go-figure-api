@@ -62,7 +62,6 @@ func TestFetchOneSuccess(t *testing.T) {
 			{"x": 6, "y": 3, "time": 2.1}
 		],
 		"drawVectors": [],
-		"calculatedDrawVectorCount": 0,
 		"createdAt": "` + createdAt + `",
 		"lastDrawVectorCalculatedAt": null
 	}`)

@@ -11,36 +11,27 @@ RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/reposit
 
 # Set up gin development tool
 WORKDIR $GOPATH/src
-
 RUN go get -v github.com/codegangsta/gin
 ENV GIN_BIN=/../../../tmp/gin-bin
 ENV GIN_PORT=8080
 ENV BIN_APP_PORT=8081
-ENV DEVELOPMENT=true
-
+ENV APP_PORT=8081
 WORKDIR $GOPATH/src/app
 
+# Copy code to image
 COPY . .
-COPY docker/start.sh /bin/original_start.sh
 
 # Turn on Go 1.11 Modules and build
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0
 RUN go build -o /bin/app
 
-# Set up start script
-RUN tr -d '\r' < /bin/original_start.sh > /bin/start.sh && \
-    chmod -R 700 /bin/start.sh
+CMD gin run main.go
 
-# Set application port env var
-ENV APP_PORT=8080
-
-ENTRYPOINT ["/bin/start.sh"]
 
 # Production build
 FROM alpine AS final
 
-COPY --from=builder /bin/start.sh /bin/start.sh
 COPY --from=builder /bin/app /bin/app
 
 WORKDIR /
@@ -49,4 +40,4 @@ ENV APP_PORT=8080
 
 EXPOSE 8080
 
-ENTRYPOINT ["/bin/start.sh"]
+CMD /bin/app
