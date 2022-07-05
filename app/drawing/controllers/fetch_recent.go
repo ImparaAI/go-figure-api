@@ -8,5 +8,5 @@ import (
 )
 
 func FetchRecent(c echo.Context) error {
-	return c.JSON(http.StatusOK, store.New().GetRecent())
+	return c.JSON(http.StatusOK, store.New(c.Request().Context()).GetRecent())
 }

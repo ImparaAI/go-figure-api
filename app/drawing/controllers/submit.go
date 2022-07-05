@@ -12,7 +12,7 @@ import (
 func Submit(c echo.Context) error {
 	points, _ := c.Get("points").([]types.OriginalPoint)
 
-	id := store.New().Create(points)
+	id := store.New(c.Request().Context()).Create(points)
 
 	processing.AddToQueue(id)
 
@@ -20,5 +20,5 @@ func Submit(c echo.Context) error {
 }
 
 type Response struct {
-	Id int `json:"id"`
+	Id int64 `json:"id"`
 }

@@ -5,7 +5,7 @@ import (
 )
 
 type Drawing struct {
-	Id                         int                 `json:"id"`
+	Id                         int64               `json:"id"`
 	Featured                   bool                `json:"featured"`
 	OriginalPoints             []OriginalPoint     `json:"originalPoints"`
 	DrawVectors                []DrawVector        `json:"drawVectors"`

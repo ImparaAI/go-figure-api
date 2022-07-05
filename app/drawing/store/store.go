@@ -20,9 +20,9 @@ func New() Store {
 }
 
 type Store interface {
-	Exists(id int) bool
-	Get(id int) types.Drawing
+	Exists(id int64) bool
+	Get(id int64) types.Drawing
 	GetRecent() []types.DrawingPreview
-	Create(points []types.OriginalPoint) int
-	AddVectors(drawingId int, vectors []types.DrawVector)
+	Create(points []types.OriginalPoint) int64
+	AddVectors(drawingId int64, vectors []types.DrawVector)
 }

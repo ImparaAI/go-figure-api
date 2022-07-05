@@ -6,7 +6,7 @@ import (
 )
 
 type SqlDrawing struct {
-	Id                         int                    `db:"id"`
+	Id                         int64                  `db:"id"`
 	Featured                   bool                   `db:"featured"`
 	OriginalPoints             string                 `db:"originalPoints"`
 	DrawVectors                string                 `db:"drawVectors"`

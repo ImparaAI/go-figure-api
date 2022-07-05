@@ -1,21 +1,24 @@
 package processing
 
 import (
+	"context"
+
 	"api/app/drawing/store"
 	"api/app/drawing/types"
 )
 
 type OriginalPointsFactory struct{}
 
-func (factory OriginalPointsFactory) Build(drawingId int) []types.OriginalPoint {
+func (factory OriginalPointsFactory) Build(drawingId int64) []types.OriginalPoint {
 	drawing := factory.getDrawing(drawingId)
 	factory.normalizeTime(drawing.OriginalPoints)
 
 	return drawing.OriginalPoints
 }
 
-func (factory OriginalPointsFactory) getDrawing(drawingId int) types.Drawing {
-	store := store.New()
+func (factory OriginalPointsFactory) getDrawing(drawingId int64) types.Drawing {
+	ctx := context.Background()
+	store := store.New(ctx)
 	drawing := store.Get(drawingId)
 
 	if drawing.Id == 0 {

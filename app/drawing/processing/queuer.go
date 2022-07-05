@@ -1,11 +1,11 @@
 package processing
 
-var creationQueue, workQueue chan int
+var creationQueue, workQueue chan int64
 
 func PrepareQueues() {
 	processorCount := 5
-	creationQueue = make(chan int)
-	workQueue = make(chan int, processorCount)
+	creationQueue = make(chan int64)
+	workQueue = make(chan int64, processorCount)
 
 	go processCreationQueue()
 
@@ -14,7 +14,7 @@ func PrepareQueues() {
 	}
 }
 
-func AddToQueue(id int) {
+func AddToQueue(id int64) {
 	creationQueue <- id
 }
 

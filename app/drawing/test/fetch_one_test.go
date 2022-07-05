@@ -1,6 +1,7 @@
 package test
 
 import (
+	"context"
 	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
@@ -41,7 +42,8 @@ func TestFetchOneSuccess(t *testing.T) {
 		{X: 6, Y: 3, Time: 2.1},
 	}
 
-	store := store.New()
+	ctx := context.Background()
+	store := store.New(ctx)
 	id := store.Create(points)
 
 	response := requester.Get("/drawing/" + strconv.Itoa(id))

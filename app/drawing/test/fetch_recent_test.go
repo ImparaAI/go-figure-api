@@ -1,6 +1,7 @@
 package test
 
 import (
+	"context"
 	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
@@ -27,7 +28,8 @@ func TestFetchRecent(t *testing.T) {
 }
 
 func createFetchRecentDrawingJson() string {
-	store := store.New()
+	ctx := context.Background()
+	store := store.New(ctx)
 	points := []types.OriginalPoint{
 		{X: 4, Y: 5, Time: 0},
 		{X: 5, Y: 1, Time: 1},
