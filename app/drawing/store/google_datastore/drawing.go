@@ -9,7 +9,6 @@ type DatastoreDrawing struct {
 	Featured                   bool      `datastore:"featured`
 	OriginalPoints             string    `datastore:"original_points,noindex`
 	DrawVectors                string    `datastore:"draw_vectors,noindex`
-	CalculatedDrawVectorCount  int       `datastore:"calculated_draw_vector_count,noindex`
 	CreatedAt                  time.Time `datastore:"created_at`
 	LastDrawVectorCalculatedAt time.Time `datastore:"last_draw_vector_calculated_at,noindex`
 }

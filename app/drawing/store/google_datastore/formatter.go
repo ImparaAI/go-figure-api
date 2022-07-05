@@ -13,7 +13,6 @@ func formatDatastoreDrawing(datastoreDrawing DatastoreDrawing) types.Drawing {
 	drawing := types.Drawing{
 		Id:                         datastoreDrawing.Id,
 		Featured:                   datastoreDrawing.Featured,
-		CalculatedDrawVectorCount:  datastoreDrawing.CalculatedDrawVectorCount,
 		CreatedAt:                  formatting.JSONTime(datastoreDrawing.CreatedAt),
 		LastDrawVectorCalculatedAt: formatting.JSONTime(datastoreDrawing.LastDrawVectorCalculatedAt),
 	}
