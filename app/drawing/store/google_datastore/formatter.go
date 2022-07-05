@@ -1,60 +1,54 @@
-package mysql
+package google_datastore
 
 import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 
 	"api/app/drawing/types"
 	"api/app/formatting"
 )
 
-func formatSqlDrawing(sqlDrawing SqlDrawing) types.Drawing {
+func formatDatastoreDrawing(datastoreDrawing DatastoreDrawing) types.Drawing {
 	drawing := types.Drawing{
-		Id:                        sqlDrawing.Id,
-		Featured:                  sqlDrawing.Featured,
-		CalculatedDrawVectorCount: sqlDrawing.CalculatedDrawVectorCount,
-		CreatedAt:                 formatting.JSONTime(sqlDrawing.CreatedAt),
+		Id:                         datastoreDrawing.Id,
+		Featured:                   datastoreDrawing.Featured,
+		CalculatedDrawVectorCount:  datastoreDrawing.CalculatedDrawVectorCount,
+		CreatedAt:                  formatting.JSONTime(datastoreDrawing.CreatedAt),
+		LastDrawVectorCalculatedAt: formatting.JSONTime(datastoreDrawing.LastDrawVectorCalculatedAt),
 	}
 
-	if sqlDrawing.LastDrawVectorCalculatedAt.Valid {
-		drawing.LastDrawVectorCalculatedAt = formatting.JSONTime(sqlDrawing.LastDrawVectorCalculatedAt.Time)
-	} else {
-		drawing.LastDrawVectorCalculatedAt = formatting.JSONTime(time.Time{})
-	}
-
-	json.Unmarshal([]byte(sqlDrawing.OriginalPoints), &drawing.OriginalPoints)
-	json.Unmarshal([]byte(sqlDrawing.DrawVectors), &drawing.DrawVectors)
+	json.Unmarshal([]byte(datastoreDrawing.OriginalPoints), &drawing.OriginalPoints)
+	json.Unmarshal([]byte(datastoreDrawing.DrawVectors), &drawing.DrawVectors)
 
 	return drawing
 }
 
-func formatSqlDrawingPreviews(sqlDrawings []SqlDrawing) []types.DrawingPreview {
+func formatDatastoreDrawingPreviews(datastoreDrawings []*DatastoreDrawing) []types.DrawingPreview {
 	drawings := []types.DrawingPreview{}
 
-	for _, sqlDrawing := range sqlDrawings {
-		drawings = append(drawings, formatSqlDrawingPreview(sqlDrawing))
+	for _, datastoreDrawing := range datastoreDrawings {
+		drawings = append(drawings, formatDatastoreDrawingPreview(datastoreDrawing))
 	}
 
 	return drawings
 }
 
-func formatSqlDrawingPreview(sqlDrawing SqlDrawing) types.DrawingPreview {
+func formatDatastoreDrawingPreview(datastoreDrawing *DatastoreDrawing) types.DrawingPreview {
 	drawingPreview := types.DrawingPreview{
-		Id:      sqlDrawing.Id,
-		SvgPath: buildSvgPath(sqlDrawing),
+		Id:      datastoreDrawing.Id,
+		SvgPath: buildSvgPath(datastoreDrawing),
 	}
 
 	return drawingPreview
 }
 
-func buildSvgPath(sqlDrawing SqlDrawing) string {
+func buildSvgPath(datastoreDrawing *DatastoreDrawing) string {
 	var path strings.Builder
 	var originalPoints []types.OriginalPoint
 
 	path.Grow(len(originalPoints) * 10)
-	json.Unmarshal([]byte(sqlDrawing.OriginalPoints), &originalPoints)
+	json.Unmarshal([]byte(datastoreDrawing.OriginalPoints), &originalPoints)
 
 	for i, point := range originalPoints {
 		if i == 0 {

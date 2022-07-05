@@ -10,87 +10,80 @@ import (
 )
 
 type GoogleDatastoreStore struct {
-	DB *sqlx.DB
+	Ctx    context.Context
+	Client *datastore.Client
 }
 
-func (store *GoogleDatastoreStore) Exists(id int) bool {
-	return !!Get(id)
+func (store *GoogleDatastoreStore) Exists(id int64) bool {
+	return true
 }
 
-func (store *GoogleDatastoreStore) Get(id int) types.Drawing {
-	ctx := context.Background()
-	client, _ := datastore.NewClient(ctx, "my-proj")
-	defer client.Close()
-
+func (store *GoogleDatastoreStore) Get(id int64) types.Drawing {
 	var drawing DatastoreDrawing
-	key := datastore.NameKey("Drawing", id, nil)
-	err := client.Get(ctx, key, &drawing)
+	key := datastore.IDKey("Drawing", id, nil)
 
-	if err != nil {
+	if err := store.Client.Get(store.Ctx, key, &drawing); err != nil {
 		panic(err)
 	}
+
+	drawing.Id = id
 
 	return formatDatastoreDrawing(drawing)
 }
 
 func (store *GoogleDatastoreStore) GetRecent() []types.DrawingPreview {
-	var sqlDrawings []SqlDrawing
+	var datastoreDrawings []*DatastoreDrawing
 
-	err := store.DB.Select(&sqlDrawings, "SELECT id, originalPoints FROM drawings ORDER BY id DESC LIMIT 20")
 
+	// Create a query to fetch all Task entities, ordered by "created".
+	query := datastore.NewQuery("Drawing").Order("-created_at").Limit(20)
+	keys, err := store.Client.GetAll(store.Ctx, query, &datastoreDrawings)
 	if err != nil {
 		panic(err)
 	}
 
-	return formatSqlDrawingPreviews(sqlDrawings)
+	// Set the id field on each Task from the corresponding key.
+	for i, key := range keys {
+		datastoreDrawings[i].Id = key.ID
+	}
+
+	return formatDatastoreDrawingPreviews(datastoreDrawings)
 }
 
-func (store *GoogleDatastoreStore) Create(points []types.OriginalPoint) int {
-	ctx := context.Background()
-	client, _ := datastore.NewClient(ctx, "my-proj")
-	defer client.Close()
-
+func (store *GoogleDatastoreStore) Create(points []types.OriginalPoint) int64 {
 	json, _ := json.Marshal(points)
 	drawing := &DatastoreDrawing{
-		OriginalPoints: string(json[:])
-		DrawVectors:    "[]"
+		OriginalPoints: string(json[:]),
+		DrawVectors:    "[]",
 		CreatedAt:      time.Now(),
 	}
 
   key := datastore.IncompleteKey("Drawing", nil)
-  _, err := client.Put(ctx, key, &drawing)
+  resultKey, err := store.Client.Put(store.Ctx, key, drawing)
 
   if err != nil {
 		panic(err)
   }
 
-  return int(key)
+  return resultKey.ID
 }
 
-func (store *GoogleDatastoreStore) AddVectors(drawingId int, vectors []types.DrawVector) {
-	json, _ := json.Marshal(vectors)
-	ctx := context.Background()
-	client, _ := datastore.NewClient(ctx, "my-proj")
-	defer client.Close()
+func (store *GoogleDatastoreStore) AddVectors(drawingId int64, vectors []types.DrawVector) {
+	key := datastore.IDKey("Drawing", drawingId, nil)
+
+	_, err := store.Client.RunInTransaction(store.Ctx, func(tx *datastore.Transaction) error {
+		var drawing DatastoreDrawing
+		if err := tx.Get(key, &drawing); err != nil {
+			return err
+		}
+		json, _ := json.Marshal(vectors)
+		drawing.DrawVectors = string(json)
+		_, err := tx.Put(key, &drawing)
+		return err
+	})
 
 
-	key := datastore.NameKey("Drawing", drawingId, nil)
-	tx, err := client.NewTransaction(ctx)
 	if err != nil {
-		panic(err)
-	}
-
-	var drawing DatastoreDrawing
-	if err := tx.Get(key, &drawing); err != nil {
-	        log.Fatalf("tx.Get: %v", err)
-	}
-
-	task.DrawVectors = json
-
-	if _, err := tx.Put(key, &drawing); err != nil {
-		panic(err)
-	}
-	if _, err := tx.Commit(); err != nil {
 		panic(err)
 	}
 }

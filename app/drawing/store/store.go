@@ -1,6 +1,7 @@
 package store
 
 import (
+	"context"
 	"os"
 
 	"api/app/drawing/store/mysql"
@@ -9,11 +10,16 @@ import (
 	"api/database"
 )
 
-func New() Store {
+func New(ctx context.Context) Store {
+	var store Store
+
 	if os.Getenv("DB_STORE") == "google_datastore" {
-		var store Store = &google_datastore.GoogleDatastoreStore{database.GetDb()}
+		store = &google_datastore.GoogleDatastoreStore{
+			Ctx:    ctx,
+			Client: database.GetDatastore(),
+		}
 	} else {
-		var store Store = &mysql.MySqlStore{database.GetDb()}
+		store = &mysql.MySqlStore{database.GetDb()}
 	}
 
 	return store
