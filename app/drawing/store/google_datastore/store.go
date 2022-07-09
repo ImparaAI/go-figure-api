@@ -15,6 +15,13 @@ type GoogleDatastoreStore struct {
 }
 
 func (store *GoogleDatastoreStore) Exists(id int64) bool {
+	var drawing DatastoreDrawing
+	key := datastore.IDKey("Drawing", id, nil)
+
+	if err := store.Client.Get(store.Ctx, key, &drawing); err != nil {
+		return false
+	}
+
 	return true
 }
 
@@ -34,8 +41,6 @@ func (store *GoogleDatastoreStore) Get(id int64) types.Drawing {
 func (store *GoogleDatastoreStore) GetRecent() []types.DrawingPreview {
 	var datastoreDrawings []*DatastoreDrawing
 
-
-	// Create a query to fetch all Task entities, ordered by "created".
 	query := datastore.NewQuery("Drawing").Order("-created_at").Limit(20)
 	keys, err := store.Client.GetAll(store.Ctx, query, &datastoreDrawings)
 	if err != nil {

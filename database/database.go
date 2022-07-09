@@ -26,7 +26,8 @@ func Initialize() error {
 		var err error
 		ctx := context.Background()
 		// TODO: set project id in envar
-		datastoreClient, err = datastore.NewClient(ctx, "imparaai-cloud")
+		project := os.Getenv("DATASTORE_PROJECT")
+		datastoreClient, err = datastore.NewClient(ctx, project)
 
 		return err
 	} else {
