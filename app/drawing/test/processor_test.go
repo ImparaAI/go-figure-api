@@ -1,6 +1,7 @@
 package test
 
 import (
+	"context"
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/assert"
 	"math"
@@ -14,7 +15,8 @@ import (
 )
 
 func TestOriginPoint(t *testing.T) {
-	store := store.New()
+	ctx := context.Background()
+	store := store.New(ctx)
 	points := []types.OriginalPoint{{Time: 0.00, X: 0, Y: 0}}
 	id := store.Create(points)
 	processing.Process(id)
@@ -29,7 +31,8 @@ func TestOriginPoint(t *testing.T) {
 }
 
 func TestNonOriginPoint(t *testing.T) {
-	store := store.New()
+	ctx := context.Background()
+	store := store.New(ctx)
 	points := []types.OriginalPoint{{Time: 0, X: 50, Y: 50}}
 	id := store.Create(points)
 	processing.Process(id)
@@ -44,7 +47,8 @@ func TestNonOriginPoint(t *testing.T) {
 }
 
 func TestCircle(t *testing.T) {
-	store := store.New()
+	ctx := context.Background()
+	store := store.New(ctx)
 	radius := 100.00
 	id := store.Create(buildUnitCirclePoints(radius))
 	processing.Process(id)

@@ -3,27 +3,44 @@ package database
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"cloud.google.com/go/datastore"
 	"os"
 	"time"
+	"context"
 )
 
+var datastoreClient *datastore.Client
 var persistentDb *sqlx.DB
 var testing = false
+
+func GetDatastore() *datastore.Client {
+	return datastoreClient
+}
 
 func GetDb() *sqlx.DB {
 	return persistentDb
 }
 
 func Initialize() error {
-	err := createDatabase()
+	if os.Getenv("DB_STORE") == "google_datastore" {
+		var err error
+		ctx := context.Background()
+		// TODO: set project id in envar
+		project := os.Getenv("DATASTORE_PROJECT")
+		datastoreClient, err = datastore.NewClient(ctx, project)
 
-	if err != nil {
+		return err
+	} else {
+		err := createDatabase()
+
+		if err != nil {
+			return err
+		}
+
+		persistentDb, err = openConnection(getDbName())
+
 		return err
 	}
-
-	persistentDb, err = openConnection(getDbName())
-
-	return err
 }
 
 func SetTestingEnvironment() {
@@ -31,7 +48,11 @@ func SetTestingEnvironment() {
 }
 
 func Close() {
-	persistentDb.Close()
+	if os.Getenv("DB_STORE") == "google_datastore" {
+		datastoreClient.Close()
+	} else {
+		persistentDb.Close()
+	}
 }
 
 func ClearTestingDb() {

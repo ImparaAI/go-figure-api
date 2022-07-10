@@ -11,7 +11,7 @@ type MySqlStore struct {
 	DB *sqlx.DB
 }
 
-func (store *MySqlStore) Exists(id int) bool {
+func (store *MySqlStore) Exists(id int64) bool {
 	var count int
 	err := store.DB.Get(&count, "SELECT COUNT(id) FROM drawings WHERE id = ?", id)
 
@@ -22,7 +22,7 @@ func (store *MySqlStore) Exists(id int) bool {
 	return count > 0
 }
 
-func (store *MySqlStore) Get(id int) types.Drawing {
+func (store *MySqlStore) Get(id int64) types.Drawing {
 	var sqlDrawing SqlDrawing
 
 	err := store.DB.Get(&sqlDrawing, "SELECT * FROM drawings WHERE id = ?", id)
@@ -46,16 +46,16 @@ func (store *MySqlStore) GetRecent() []types.DrawingPreview {
 	return formatSqlDrawingPreviews(sqlDrawings)
 }
 
-func (store *MySqlStore) Create(points []types.OriginalPoint) int {
+func (store *MySqlStore) Create(points []types.OriginalPoint) int64 {
 	json, _ := json.Marshal(points)
 
 	result := store.DB.MustExec(`INSERT INTO drawings (originalPoints, drawVectors) VALUES (?, '[]')`, string(json[:]))
 	id, _ := result.LastInsertId()
 
-	return int(id)
+	return int64(id)
 }
 
-func (store *MySqlStore) AddVectors(drawingId int, vectors []types.DrawVector) {
+func (store *MySqlStore) AddVectors(drawingId int64, vectors []types.DrawVector) {
 	json, _ := json.Marshal(vectors)
 
 	store.DB.MustExec("UPDATE drawings SET drawVectors = ? WHERE id = ?", string(json), drawingId)

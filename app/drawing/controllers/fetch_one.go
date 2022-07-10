@@ -9,7 +9,7 @@ import (
 )
 
 func FetchOne(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
 
-	return c.JSON(http.StatusOK, store.New().Get(id))
+	return c.JSON(http.StatusOK, store.New(c.Request().Context()).Get(id))
 }
